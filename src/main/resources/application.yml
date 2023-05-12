@@ -1,6 +1,10 @@
 micronaut:
   application:
     name: monopoly
+
+  server:
+    port: 8080
+
 netty:
   default:
     allocator:
