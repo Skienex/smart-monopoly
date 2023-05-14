@@ -15,8 +15,8 @@ public class Player {
         this.admin = false;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public UUID getId() {
+        return id;
     }
 
     public int getMoney() {
