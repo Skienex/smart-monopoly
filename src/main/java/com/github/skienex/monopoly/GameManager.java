@@ -10,20 +10,20 @@ import com.github.skienex.monopoly.utils.scanner.TextInput;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GameManager {
     private final Dice dice = new Dice();
+    private final Map<UUID, Integer> playerIndices = new HashMap<>();
     private final List<Player> players = new ArrayList<>();
+    private boolean started;
 
-    public void setupGame() {
-
-    }
-
-    public void startGame() throws Exception {
-        VariablesScheme variables = getJSONVariables();
+    public void startGame() {
+        this.started = true;
+//        VariablesScheme variables = getJSONVariables();
+        if (true) {
+            return;
+        }
 
         if (TextInput.input("Würfeln? (y / n): ").equalsIgnoreCase("n")) {
             return;
@@ -38,7 +38,7 @@ public class GameManager {
         int player = new Random().nextInt(allPlayers);
         System.out.println("Player" + player);
 
-        move(getPlayer(player), roll);
+//        move(getPlayer(player), roll);
 
         if (roll.pasch()) {
             System.out.println("Roll: Pasch");
@@ -46,21 +46,22 @@ public class GameManager {
         }
     }
 
-    public Player getPlayer(int index) {
-        // Keine exceptions
-        if (players.size() >= index) {
+    public Player getPlayer(UUID id) {
+        Integer index = playerIndices.get(id);
+        if (index == null) {
             return null;
         }
         return players.get(index);
     }
 
-    public int addPlayer(String displayName) {
-        Player player = new Player(displayName);
+    public Player addPlayer(UUID id) {
+        Player player = new Player(id);
         if (players.isEmpty()) {
             player.setAdmin(true);
         }
+        playerIndices.put(id, players.size());
         players.add(player);
-        return players.size() - 1;
+        return player;
     }
 
     public int getPlayerCount() {
@@ -93,6 +94,10 @@ public class GameManager {
             }
             return FieldData.FREE;
         }
+    }
+
+    public boolean hasStarted() {
+        return started;
     }
 
     private static VariablesScheme getJSONVariables() throws Exception {

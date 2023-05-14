@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.compileJava
+
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.7.9"
@@ -24,6 +26,10 @@ application {
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
     targetCompatibility = JavaVersion.toVersion("17")
+}
+
+tasks.compileJava {
+    options.compilerArgs.add("--enable-preview")
 }
 
 graalvmNative.toolchainDetection.set(false)

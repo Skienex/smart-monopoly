@@ -1,14 +1,16 @@
 package com.github.skienex.monopoly.utils.json;
 
+import java.util.UUID;
+
 public class Player {
-    private final String displayName;
+    private final UUID id;
     private final boolean[] ownedStreets;
     private int money;
     private int position;
     private boolean admin;
 
-    public Player(String displayName) {
-        this.displayName = displayName;
+    public Player(UUID id) {
+        this.id = id;
         this.ownedStreets = new boolean[40];
         this.money = 2500;
         this.position = 0;
