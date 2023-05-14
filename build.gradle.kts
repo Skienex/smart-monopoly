@@ -21,7 +21,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("com.github.skienex.Application")
+    mainClass.set("com.github.skienex.monopoly.Application")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
