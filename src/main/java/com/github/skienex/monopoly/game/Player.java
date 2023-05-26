@@ -1,4 +1,4 @@
-package com.github.skienex.monopoly.utils.json;
+package com.github.skienex.monopoly.game;
 
 import java.util.UUID;
 

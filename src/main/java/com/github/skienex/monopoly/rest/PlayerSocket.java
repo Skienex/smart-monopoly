@@ -1,9 +1,11 @@
 package com.github.skienex.monopoly.rest;
 
 import com.github.skienex.monopoly.GameManager;
+import com.github.skienex.monopoly.game.FieldData;
+import com.github.skienex.monopoly.game.Player;
 import com.github.skienex.monopoly.rest.schemes.ClientPacket;
 import com.github.skienex.monopoly.rest.schemes.ServerPacket;
-import com.github.skienex.monopoly.utils.json.Player;
+import com.github.skienex.monopoly.utils.Dice;
 import io.micronaut.websocket.WebSocketBroadcaster;
 import io.micronaut.websocket.WebSocketSession;
 import io.micronaut.websocket.annotation.OnClose;
@@ -14,7 +16,6 @@ import io.micronaut.websocket.annotation.ServerWebSocket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 @ServerWebSocket("/game")
 public class PlayerSocket {
@@ -94,10 +95,26 @@ public class PlayerSocket {
                 // TODO: start with first move
                 broadcaster.broadcastAsync(new ServerPacket.StartGame(names));
             }
-            default -> {
-                // TODO: fehler
-                session.sendAsync(new ServerPacket.Error("Packet not implemented"));
+            case ClientPacket.RollDice rollDice -> {
+                synchronized (lock) {
+                    UUID id = sessions.get(session);
+                    Player activePlayer = manager.getActivePlayer();
+                    if (!activePlayer.getId().equals(id)) {
+                        session.sendAsync(new ServerPacket.Error("Not your turn"));
+                        return;
+                    }
+                    Dice.Roll roll = manager.getDice().roll();
+                    session.sendAsync(new ServerPacket.Roll(id, roll.firstNumber(), roll.secondNumber()));
+                    manager.move(activePlayer, roll);
+                    FieldData data = manager.fieldData(activePlayer);
+                    session.sendAsync(new ServerPacket.FieldData(data));
+//                    manager.incrementActivePlayer();
+//                    broadcaster.broadcastAsync(new ServerPacket.MovePlayer(id, activePlayer.getPosition()));
+//                    broadcaster.broadcastAsync(new ServerPacket.NextRoll(id, roll.firstNumber(), roll.secondNumber(),
+//                            manager.getActivePlayer().getId()));
+                }
             }
+            default -> session.sendAsync(new ServerPacket.Error("Packet not implemented"));
         }
     }
 

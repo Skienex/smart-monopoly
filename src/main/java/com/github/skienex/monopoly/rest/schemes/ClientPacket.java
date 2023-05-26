@@ -21,9 +21,7 @@ public abstract class ClientPacket {
         }
     }
 
-    public static class StartGame extends ClientPacket {
-    }
+    public static class StartGame extends ClientPacket {}
 
-    public static class RollDice extends ClientPacket {
-    }
+    public static class RollDice extends ClientPacket {}
 }

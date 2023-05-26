@@ -1,8 +1,15 @@
 package com.github.skienex.monopoly.game;
 
-public enum FieldData {
-    OWNED_BY_PLAYER,
-    OWNED_BY_OTHER_PLAYER,
-    FREE,
-    NO_STREET,
+public class FieldData {
+    public static class OwnedByPlayer extends FieldData {
+    }
+
+    public static class OwnedByOtherPlayer extends FieldData {
+    }
+
+    public static class Free extends FieldData {
+    }
+
+    public static class NoStreet extends FieldData {
+    }
 }

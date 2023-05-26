@@ -22,10 +22,11 @@ dependencies {
 
 application {
     mainClass.set("com.github.skienex.monopoly.Application")
+    applicationDefaultJvmArgs = listOf("--enable-preview")
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
+    sourceCompatibility = JavaVersion.toVersion("20")
+    targetCompatibility = JavaVersion.toVersion("20")
 }
 
 tasks.compileJava {

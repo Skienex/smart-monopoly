@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="log">
+
+</div>
+
+<button onclick="onLogin()" id="login">Login</button>
+<button onclick="onStart()" id="start">Start Game</button>
+<button onclick="rollDice()" id="roll">Roll Dice</button>
+
+<script>
+    function buildPacket(type, data) {
+        return JSON.stringify({type: type, ...data})
+    }
+
+    const con = {
+        socket: new WebSocket('ws://192.168.178.36:8080/game'),
+        connected: false,
+    }
+
+    const log = document.getElementById("log")
+    const login = document.getElementById("login")
+    const game = document.getElementById("start")
+    const roll = document.getElementById("roll")
+    let yourId
+    let admin
+    let active = false
+
+    const callbacks = {
+        'ERROR': (packet) => {
+            log.innerText += `Error: ${packet.message}\n`
+        },
+        'DEBUG': (packet) => {
+            log.innerText += `Debug: ${packet.message}\n`
+        },
+        'LOGIN': (packet) => {
+            log.innerText += `Logged in {admin: ${packet.admin}, UUID: ${packet.yourId}}\n`
+            yourId = packet.yourId;
+        },
+        'START_GAME': (packet) => {
+            log.innerText += `Started Game. Players: ${JSON.stringify(packet.players)}\n`
+        },
+        'ROLL': (packet) => {
+            const pasch = packet.first === packet.second
+            log.innerText += `Next Roll. ${packet.first}, ${packet.second}, pasch: ${pasch}, UUID: ${packet.id}\n`
+            if (packet.nextId === yourId) {
+                active = true;
+                // TODO: display roll dice element
+            }
+        },
+        'MOVE_PLAYER': (packet) => {
+            log.innerText += `Next Roll. ${JSON.stringify(packet.first)}, ${JSON.stringify(packet.second)}, pasch: ${pasch}\n`
+        },
+        'FIELD_DATA': (packet) => {
+            log.innerText += `Field data: ${packet.data}\n`
+        },
+    }
+
+    con.socket.onopen = (event) => {
+        con.connected = true
+    }
+
+    con.socket.onmessage = (event) => {
+        const packet = JSON.parse(event.data)
+        callbacks[packet.type](packet)
+    }
+
+    con.socket.onclose = (event) => {
+        con.connected = false
+        log.innerText += `Disconnected\n`
+    }
+
+    function onLogin() {
+        con.socket.send(buildPacket('LOGIN', {name: 'Skienex'}))
+    }
+
+    function onStart() {
+        con.socket.send(buildPacket('START_GAME', {}))
+    }
+
+    function rollDice() {
+        con.socket.send(buildPacket('ROLL_DICE', {}))
+    }
+</script>
+</body>
+</html>
