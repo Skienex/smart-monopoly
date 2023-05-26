@@ -26,75 +26,75 @@ public class RestEndpoint {
     @Get(value = "/websocket.html", produces = MediaType.TEXT_HTML)
     public String websocket() {
         return """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div id="log">
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Title</title>
+                </head>
+                <body>
+                <div id="log">
 
-</div>
+                </div>
 
-<button onclick="onLogin()" id="login">Login</button>
-<button onclick="onStart()" id="start">Start Game</button>
+                <button onclick="onLogin()" id="login">Login</button>
+                <button onclick="onStart()" id="start">Start Game</button>
 
-<script>
-    const webSocket = new WebSocket('ws://localhost:8080/api/game')
-    let connected = false
+                <script>
+                    const webSocket = new WebSocket('ws://192.168.178.30:8080/game')
+                    let connected = false
 
-    const log = document.getElementById("log")
-    const login = document.getElementById("login")
-    const game = document.getElementById("start")
+                    const log = document.getElementById("log")
+                    const login = document.getElementById("login")
+                    const game = document.getElementById("start")
 
-    webSocket.onopen = (event) => {
-        connected = true
-    }
+                    webSocket.onopen = (event) => {
+                        connected = true
+                    }
 
-    webSocket.onmessage = (event) => {
-        const data = JSON.parse(event.data)
-        switch (data.type) {
-            case 'ERROR': {
-                log.innerText += `Error: ${data.message}\\n`
-                break
-            }
-            case 'LOGIN': {
-                log.innerText += `Logged in {admin: ${data.admin}, UUID: ${data.yourId}}\\n`
-                break
-            }
-            case 'START_GAME': {
-                log.innerText += `Started Game. Players: ${JSON.stringify(data.players)}\\n`
-                break
-            }
-            case 'MOVE_PLAYER': {
+                    webSocket.onmessage = (event) => {
+                        const data = JSON.parse(event.data)
+                        switch (data.type) {
+                            case 'ERROR': {
+                                log.innerText += `Error: ${data.message}\\n`
+                                break
+                            }
+                            case 'LOGIN': {
+                                log.innerText += `Logged in {admin: ${data.admin}, UUID: ${data.yourId}}\\n`
+                                break
+                            }
+                            case 'START_GAME': {
+                                log.innerText += `Started Game. Players: ${JSON.stringify(data.players)}\\n`
+                                break
+                            }
+                            case 'MOVE_PLAYER': {
 
-                break
-            }
-        }
-    }
+                                break
+                            }
+                        }
+                    }
 
-    webSocket.onclose = (event) => {
-        connected = false
-        log.innerText += `Disconnected\\n`
-    }
+                    webSocket.onclose = (event) => {
+                        connected = false
+                        log.innerText += `Disconnected\\n`
+                    }
 
-    function onLogin() {
-        webSocket.send(JSON.stringify({
-            type: 'LOGIN',
-            name: 'Skienex'
-        }))
-    }
+                    function onLogin() {
+                        webSocket.send(JSON.stringify({
+                            type: 'LOGIN',
+                            name: 'Skienex'
+                        }))
+                    }
 
-    function onStart() {
-        webSocket.send(JSON.stringify({
-            type: 'START_GAME'
-        }))
-    }
-</script>
-</body>
-</html>
-""";
+                    function onStart() {
+                        webSocket.send(JSON.stringify({
+                            type: 'START_GAME'
+                        }))
+                    }
+                </script>
+                </body>
+                </html>
+                """;
     }
 
 //    @Post(value = "/register")

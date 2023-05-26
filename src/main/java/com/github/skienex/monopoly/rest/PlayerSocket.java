@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-@ServerWebSocket("/api/game")
+@ServerWebSocket("/game")
 public class PlayerSocket {
     private final WebSocketBroadcaster broadcaster;
     private final Map<WebSocketSession, UUID> sessions;
