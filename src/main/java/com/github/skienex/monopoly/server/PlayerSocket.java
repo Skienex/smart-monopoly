@@ -63,6 +63,7 @@ public class PlayerSocket {
                 }
                 // TODO: Erfolg melden
                 session.sendAsync(new ServerPacket.Login(admin, id));
+                session.sendAsync(new ServerPacket.UpdatePlayers(names));
             }
             case ClientPacket.StartGame startGame -> {
                 synchronized (lock) {
@@ -102,8 +103,10 @@ public class PlayerSocket {
                         return;
                     }
                     Dice.Roll roll = manager.getDice().roll();
+                    final int old_position = manager.getPlayer(activePlayer.getId()).getPosition();
                     session.sendAsync(new ServerPacket.Roll(id, roll.firstNumber(), roll.secondNumber()));
                     manager.move(activePlayer, roll);
+                    session.sendAsync(new ServerPacket.MovePlayer(activePlayer.getId(), manager.getPlayer(activePlayer.getId()).getPosition(), old_position));
                     FieldData data = manager.fieldData(activePlayer);
                     session.sendAsync(new ServerPacket.FieldData(data));
 //                    manager.incrementActivePlayer();

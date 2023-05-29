@@ -74,7 +74,6 @@ public class GameManager {
     }
 
     public FieldData fieldData(Player player) {
-        System.out.println("Street: " + player.getPosition());
         if (player.getPosition() % 10 == 0) {
             // Keine Straße und somit nicht bebaubar
             return new FieldData.NoStreet();
