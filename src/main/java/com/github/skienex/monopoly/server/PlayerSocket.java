@@ -68,7 +68,7 @@ public class PlayerSocket {
                 }
                 // TODO: Erfolg melden
                 session.sendAsync(new ServerPacket.Login(admin, id));
-                session.sendAsync(new ServerPacket.UpdatePlayers(names));
+                broadcaster.broadcastAsync(new ServerPacket.UpdatePlayers(names));
             }
             case ClientPacket.StartGame startGame -> {
                 synchronized (lock) {

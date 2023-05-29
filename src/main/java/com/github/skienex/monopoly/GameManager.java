@@ -27,7 +27,8 @@ public class GameManager {
     public static GameManager create() {
         try {
             return new GameManager(getJSONVariables());
-        } catch (Exception e) {
+        } catch(Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
