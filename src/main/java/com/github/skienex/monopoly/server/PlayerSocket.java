@@ -1,11 +1,9 @@
-package com.github.skienex.monopoly.rest;
+package com.github.skienex.monopoly.server;
 
 import com.github.skienex.monopoly.GameManager;
 import com.github.skienex.monopoly.game.FieldData;
 import com.github.skienex.monopoly.game.Player;
-import com.github.skienex.monopoly.rest.schemes.ClientPacket;
-import com.github.skienex.monopoly.rest.schemes.ServerPacket;
-import com.github.skienex.monopoly.utils.Dice;
+import com.github.skienex.monopoly.game.Dice;
 import io.micronaut.websocket.WebSocketBroadcaster;
 import io.micronaut.websocket.WebSocketSession;
 import io.micronaut.websocket.annotation.OnClose;

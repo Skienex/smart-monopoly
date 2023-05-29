@@ -3,9 +3,9 @@ package com.github.skienex.monopoly;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.skienex.monopoly.game.FieldData;
 import com.github.skienex.monopoly.game.Player;
-import com.github.skienex.monopoly.utils.Dice;
+import com.github.skienex.monopoly.game.Dice;
 import com.github.skienex.monopoly.game.FieldManager;
-import com.github.skienex.monopoly.utils.json.VariablesScheme;
+import com.github.skienex.monopoly.util.json.VariablesScheme;
 
 import java.io.IOException;
 import java.io.InputStream;

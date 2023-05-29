@@ -1,4 +1,4 @@
-package com.github.skienex.monopoly.rest;
+package com.github.skienex.monopoly.server;
 
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;

@@ -5,13 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-<div id="log">
-
-</div>
-
-<button onclick="onLogin()" id="login">Login</button>
-<button onclick="onStart()" id="start">Start Game</button>
-<button onclick="rollDice()" id="roll">Roll Dice</button>
+<label><textarea id="log" rows="15" cols="70" disabled></textarea></label>
+<br>
+<button onclick="clickConnect()" id="connect">Connect</button>
+<button onclick="clickLogin()" id="login" disabled>Login</button>
+<button onclick="clickStartGame()" id="start" disabled>Start Game</button>
+<button onclick="clickRollDice()" id="roll" disabled>Roll Dice</button>
 
 <script>
     function buildPacket(type, data) {
@@ -19,71 +18,92 @@
     }
 
     const con = {
-        socket: new WebSocket('ws://192.168.178.36:8080/game'),
+        socket: undefined,
         connected: false,
     }
+    let state = undefined
 
     const log = document.getElementById("log")
+    log.value = ''
+    // const connect = document.getElementById("connect")
     const login = document.getElementById("login")
-    const game = document.getElementById("start")
+    const start = document.getElementById("start")
     const roll = document.getElementById("roll")
-    let yourId
-    let admin
-    let active = false
 
     const callbacks = {
         'ERROR': (packet) => {
-            log.innerText += `Error: ${packet.message}\n`
+            log.value += `Error: ${packet.message}\n`
         },
         'DEBUG': (packet) => {
-            log.innerText += `Debug: ${packet.message}\n`
+            log.value += `Debug: ${packet.message}\n`
         },
         'LOGIN': (packet) => {
-            log.innerText += `Logged in {admin: ${packet.admin}, UUID: ${packet.yourId}}\n`
-            yourId = packet.yourId;
+            log.value += `Logged in {admin: ${packet.admin}, UUID: ${packet.yourId}}\n`
+            state = {
+                yourId: packet.yourId,
+                admin: packet.admin,
+                active: false,
+            }
+            if (state.admin) {
+                start.disabled = false
+            }
         },
         'START_GAME': (packet) => {
-            log.innerText += `Started Game. Players: ${JSON.stringify(packet.players)}\n`
+            log.value += `Started Game. Players: ${JSON.stringify(packet.players)}\n`
+            roll.disabled = false
         },
         'ROLL': (packet) => {
             const pasch = packet.first === packet.second
-            log.innerText += `Next Roll. ${packet.first}, ${packet.second}, pasch: ${pasch}, UUID: ${packet.id}\n`
+            log.value += `Next Roll. ${packet.first}, ${packet.second}, pasch: ${pasch}, UUID: ${packet.id}\n`
             if (packet.nextId === yourId) {
-                active = true;
+                active = true
                 // TODO: display roll dice element
             }
         },
         'MOVE_PLAYER': (packet) => {
-            log.innerText += `Next Roll. ${JSON.stringify(packet.first)}, ${JSON.stringify(packet.second)}, pasch: ${pasch}\n`
+            log.value += `Next Roll. ${JSON.stringify(packet.first)}, ${JSON.stringify(packet.second)}, pasch: ${pasch}\n`
         },
         'FIELD_DATA': (packet) => {
-            log.innerText += `Field data: ${packet.data}\n`
+            log.value += `Field data: ${packet.data}\n`
         },
     }
 
-    con.socket.onopen = (event) => {
-        con.connected = true
+    function clickConnect() {
+        state = undefined
+        login.disabled = true
+        start.disabled = true
+        roll.disabled = true
+        con.socket = new WebSocket('ws://0.0.0.0:8080/game')
+        con.socket.onopen = (event) => {
+            login.disabled = false
+            con.connected = true
+            log.value += 'Connected\n'
+        }
+        con.socket.onmessage = (event) => {
+            const packet = JSON.parse(event.data)
+            callbacks[packet.type](packet)
+        }
+        con.socket.onclose = (event) => {
+            login.disabled = true
+            start.disabled = true
+            roll.disabled = true
+            con.socket = undefined
+            con.connected = false
+            log.value += 'Disconnected\n'
+        }
     }
 
-    con.socket.onmessage = (event) => {
-        const packet = JSON.parse(event.data)
-        callbacks[packet.type](packet)
-    }
-
-    con.socket.onclose = (event) => {
-        con.connected = false
-        log.innerText += `Disconnected\n`
-    }
-
-    function onLogin() {
+    function clickLogin() {
+        login.disabled = true
         con.socket.send(buildPacket('LOGIN', {name: 'Skienex'}))
     }
 
-    function onStart() {
+    function clickStartGame() {
+        start.disabled = true
         con.socket.send(buildPacket('START_GAME', {}))
     }
 
-    function rollDice() {
+    function clickRollDice() {
         con.socket.send(buildPacket('ROLL_DICE', {}))
     }
 </script>

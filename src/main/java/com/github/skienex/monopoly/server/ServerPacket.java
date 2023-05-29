@@ -1,4 +1,4 @@
-package com.github.skienex.monopoly.rest.schemes;
+package com.github.skienex.monopoly.server;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
