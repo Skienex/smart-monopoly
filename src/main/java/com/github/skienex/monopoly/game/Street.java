@@ -46,4 +46,7 @@ public class Street {
     public void levelUp() {
         level++;
     }
+    public void levelDown() {
+        level--;
+    }
 }

@@ -22,7 +22,12 @@ public class Player {
     public int getMoney() {
         return money;
     }
-
+    public void subtractMoney(int subtract) {
+        money -= subtract;
+    }
+    public void addMoney(int add) {
+        money += add;
+    }
     public int getPosition() {
         return position;
     }

@@ -109,6 +109,7 @@ public class GameManager {
         if (street.level() > 0) {
             return Status.STREET_ALREADY_OWNED;
         }
+        player.subtractMoney(street.cost()[0]);
         street.levelUp();
         street.owner(player);
         return Status.SUCCESS;
@@ -117,6 +118,9 @@ public class GameManager {
     public Status sellStreet(int index, Player player) {
         Street street = streets[index];
         if (street.owner() == player && street.level() > 0) {
+            player.addMoney((street.cost()[0] / 2));
+            street.owner(null);
+            street.levelDown();
             return Status.SUCCESS;
         }
         return Status.NOT_YOUR_STREET;

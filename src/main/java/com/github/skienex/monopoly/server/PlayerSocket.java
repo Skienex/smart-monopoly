@@ -101,6 +101,10 @@ public class PlayerSocket {
             }
             case ClientPacket.RollDice rollDice -> {
                 synchronized (lock) {
+                    if (manager == null) {
+                        session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
+                        return;
+                    }
                     UUID id = sessions.get(session);
                     Player activePlayer = manager.getActivePlayer();
                     if (!activePlayer.getId().equals(id)) {
@@ -111,7 +115,8 @@ public class PlayerSocket {
                     final int old_position = manager.getPlayer(activePlayer.getId()).getPosition();
                     session.sendAsync(new ServerPacket.Roll(id, roll.firstNumber(), roll.secondNumber()));
                     manager.move(activePlayer, roll);
-                    session.sendAsync(new ServerPacket.MovePlayer(activePlayer.getId(), manager.getPlayer(activePlayer.getId()).getPosition(), old_position));
+                    session.sendAsync(new ServerPacket.MovePlayer(activePlayer.getId(),
+                            manager.getPlayer(activePlayer.getId()).getPosition(), old_position));
                     FieldData data = manager.fieldData(activePlayer);
                     session.sendAsync(new ServerPacket.FieldData(data));
 //                    manager.incrementActivePlayer();
@@ -120,20 +125,54 @@ public class PlayerSocket {
 //                            manager.getActivePlayer().getId()));
                 }
             }
-            case ClientPacket.PayRent payRent -> {}
-            case ClientPacket.GetRent getRent -> {}
+            case ClientPacket.PayRent payRent -> {
+            }
+            case ClientPacket.GetRent getRent -> {
+            }
             case ClientPacket.BuyStreet buyStreet -> {
                 synchronized (lock) {
                     if (manager == null) {
                         session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
                         return;
                     }
+                    UUID id = sessions.get(session);
+                    Player activePlayer = manager.getActivePlayer();
+                    if (!activePlayer.getId().equals(id)) {
+                        session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
+                        return;
+                    }
+                    Status status = manager.buyStreet(activePlayer.getPosition(), activePlayer);
+                    if (status != Status.SUCCESS) {
+                        session.sendAsync(ServerPacket.error(status));
+                        return;
+                    }
                 }
             }
-            case ClientPacket.SellStreet sellStreet -> {}
-            case ClientPacket.BuyHouse buyHouse -> {}
-            case ClientPacket.SellHouse sellHouse -> {}
-            case ClientPacket.SpecialField specialField -> {}
+            case ClientPacket.SellStreet sellStreet -> {
+                synchronized (lock) {
+                    if (manager == null) {
+                        session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
+                        return;
+                    }
+                    UUID id = sessions.get(session);
+                    Player activePlayer = manager.getActivePlayer();
+                    if (!activePlayer.getId().equals(id)) {
+                        session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
+                        return;
+                    }
+                    Status status = manager.sellStreet(activePlayer.getPosition(), activePlayer);
+                    if (status != Status.SUCCESS) {
+                        session.sendAsync(ServerPacket.error(status));
+                        return;
+                    }
+                }
+            }
+            case ClientPacket.BuyHouse buyHouse -> {
+            }
+            case ClientPacket.SellHouse sellHouse -> {
+            }
+            case ClientPacket.SpecialField specialField -> {
+            }
             default -> session.sendAsync(ServerPacket.error(Status.PACKET_NOT_IMPLEMENTED));
         }
     }
