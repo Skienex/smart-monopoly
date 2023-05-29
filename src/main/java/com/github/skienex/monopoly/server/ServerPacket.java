@@ -2,6 +2,7 @@ package com.github.skienex.monopoly.server;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.github.skienex.monopoly.game.Status;
 
 import java.util.Map;
 import java.util.UUID;
@@ -19,10 +20,16 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = ServerPacket.FieldData.class, name = "FIELD_DATA"),
 })
 public abstract class ServerPacket {
+    public static ServerPacket error(Status status) {
+        return new ServerPacket.Error(status.name(), status.message());
+    }
+
     public static class Error extends ServerPacket {
+        public final String id;
         public final String message;
 
-        public Error(String message) {
+        public Error(String id, String message) {
+            this.id = id;
             this.message = message;
         }
     }

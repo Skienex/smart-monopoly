@@ -4,6 +4,7 @@ import com.github.skienex.monopoly.GameManager;
 import com.github.skienex.monopoly.game.FieldData;
 import com.github.skienex.monopoly.game.Player;
 import com.github.skienex.monopoly.game.Dice;
+import com.github.skienex.monopoly.game.Status;
 import io.micronaut.websocket.WebSocketBroadcaster;
 import io.micronaut.websocket.WebSocketSession;
 import io.micronaut.websocket.annotation.OnClose;
@@ -43,7 +44,7 @@ public class PlayerSocket {
                 synchronized (lock) {
                     if (sessions.containsKey(session)) {
                         // TODO: bereits eingeloggt
-                        session.sendAsync(new ServerPacket.Error("Already logged in"));
+                        session.sendAsync(ServerPacket.error(Status.ALREADY_LOGGED_IN));
                         return;
                     }
                     id = UUID.randomUUID();
@@ -51,11 +52,15 @@ public class PlayerSocket {
                     names.put(id, login.name);
                     admin = manager == null;
                     if (manager == null) {
-                        manager = new GameManager();
+                        manager = GameManager.create();
+                        if (manager == null) {
+                            session.sendAsync(ServerPacket.error(Status.UNABLE_TO_CREATE_GAME));
+                            return;
+                        }
                     }
                     if (manager.hasStarted()) {
                         // TODO: Spiel bereits gestartet
-                        session.sendAsync(new ServerPacket.Error("Game already started"));
+                        session.sendAsync(ServerPacket.error(Status.GAME_ALREADY_STARTED));
                         return;
                     }
                     Player player = manager.addPlayer(id);
@@ -70,23 +75,23 @@ public class PlayerSocket {
                     UUID id = sessions.get(session);
                     if (id == null) {
                         // TODO: nicht eingeloggt
-                        session.sendAsync(new ServerPacket.Error("Not logged in"));
+                        session.sendAsync(ServerPacket.error(Status.NOT_LOGGED_IN));
                         return;
                     }
                     if (manager == null) {
                         // TODO: kein manager existiert
-                        session.sendAsync(new ServerPacket.Error("No game exists currently"));
+                        session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
                         return;
                     }
                     if (manager.hasStarted()) {
                         // TODO: game bereits gestartet
-                        session.sendAsync(new ServerPacket.Error("Game has already started"));
+                        session.sendAsync(ServerPacket.error(Status.GAME_ALREADY_STARTED));
                         return;
                     }
                     Player player = manager.getPlayer(id);
                     if (!player.isAdmin()) {
                         // TODO: kein admin
-                        session.sendAsync(new ServerPacket.Error("No permission to start game"));
+                        session.sendAsync(ServerPacket.error(Status.NO_PERMISSION));
                         return;
                     }
                     manager.startGame();
@@ -99,7 +104,7 @@ public class PlayerSocket {
                     UUID id = sessions.get(session);
                     Player activePlayer = manager.getActivePlayer();
                     if (!activePlayer.getId().equals(id)) {
-                        session.sendAsync(new ServerPacket.Error("Not your turn"));
+                        session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
                     }
                     Dice.Roll roll = manager.getDice().roll();
@@ -115,7 +120,21 @@ public class PlayerSocket {
 //                            manager.getActivePlayer().getId()));
                 }
             }
-            default -> session.sendAsync(new ServerPacket.Error("Packet not implemented"));
+            case ClientPacket.PayRent payRent -> {}
+            case ClientPacket.GetRent getRent -> {}
+            case ClientPacket.BuyStreet buyStreet -> {
+                synchronized (lock) {
+                    if (manager == null) {
+                        session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
+                        return;
+                    }
+                }
+            }
+            case ClientPacket.SellStreet sellStreet -> {}
+            case ClientPacket.BuyHouse buyHouse -> {}
+            case ClientPacket.SellHouse sellHouse -> {}
+            case ClientPacket.SpecialField specialField -> {}
+            default -> session.sendAsync(ServerPacket.error(Status.PACKET_NOT_IMPLEMENTED));
         }
     }
 

@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes(value = {
         @JsonSubTypes.Type(value = ClientPacket.Login.class, name = "LOGIN"),
         @JsonSubTypes.Type(value = ClientPacket.StartGame.class, name = "START_GAME"),
-        @JsonSubTypes.Type(value = ClientPacket.ActivePlayer.class, name = "ACTIVE_PLAYER"),
         @JsonSubTypes.Type(value = ClientPacket.RollDice.class, name = "ROLL_DICE"),
         @JsonSubTypes.Type(value = ClientPacket.PayRent.class, name = "PAY_RENT"),
         @JsonSubTypes.Type(value = ClientPacket.GetRent.class, name = "GET_RENT"),
@@ -30,9 +29,6 @@ public abstract class ClientPacket {
     }
 
     public static class StartGame extends ClientPacket {
-    }
-
-    public static class ActivePlayer extends ClientPacket {
     }
 
     public static class RollDice extends ClientPacket {

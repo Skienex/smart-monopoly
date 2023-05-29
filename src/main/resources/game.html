@@ -25,7 +25,7 @@
 
     const log = document.getElementById("log")
     log.value = ''
-    // const connect = document.getElementById("connect")
+    const connect = document.getElementById("connect")
     const login = document.getElementById("login")
     const start = document.getElementById("start")
     const roll = document.getElementById("roll")
@@ -48,6 +48,10 @@
                 start.disabled = false
             }
         },
+        'UPDATE_PLAYERS': (packet) => {
+            log.value += `Updated players: ${JSON.stringify(packet.players)}\n`
+            roll.disabled = false
+        },
         'START_GAME': (packet) => {
             log.value += `Started Game. Players: ${JSON.stringify(packet.players)}\n`
             roll.disabled = false
@@ -61,19 +65,20 @@
             }
         },
         'MOVE_PLAYER': (packet) => {
-            log.value += `Next Roll. ${JSON.stringify(packet.first)}, ${JSON.stringify(packet.second)}, pasch: ${pasch}\n`
+            log.value += `Next Roll. ${packet.first}, ${packet.second}, pasch: ${pasch}\n`
         },
         'FIELD_DATA': (packet) => {
-            log.value += `Field data: ${packet.data}\n`
+            log.value += `Field data: ${JSON.stringify(packet.data)}\n`
         },
     }
 
     function clickConnect() {
         state = undefined
+        connect.disabled = true
         login.disabled = true
         start.disabled = true
         roll.disabled = true
-        con.socket = new WebSocket('ws://0.0.0.0:8080/game')
+        con.socket = new WebSocket('ws://192.168.178.36:8080/game')
         con.socket.onopen = (event) => {
             login.disabled = false
             con.connected = true
@@ -84,6 +89,7 @@
             callbacks[packet.type](packet)
         }
         con.socket.onclose = (event) => {
+            connect.disabled = false
             login.disabled = true
             start.disabled = true
             roll.disabled = true

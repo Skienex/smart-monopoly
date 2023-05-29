@@ -4,14 +4,12 @@ import java.util.UUID;
 
 public class Player {
     private final UUID id;
-    private final boolean[] ownedStreets;
     private int money;
     private int position;
     private boolean admin;
 
     public Player(UUID id) {
         this.id = id;
-        this.ownedStreets = new boolean[40];
         this.money = 2500;
         this.position = 0;
         this.admin = false;
@@ -39,14 +37,6 @@ public class Player {
 
     public void setPosition(int position) {
         this.position = position % 40;
-    }
-
-    public boolean[] getOwnedStreets() {
-        return ownedStreets;
-    }
-
-    public boolean ownsStreet(int index) {
-        return ownedStreets[index];
     }
 
     public boolean isAdmin() {

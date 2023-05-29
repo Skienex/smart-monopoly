@@ -1,5 +1,6 @@
 package com.github.skienex.monopoly.util.json;
 
-public class VariablesScheme {
-    public StreetScheme[] streets;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record VariablesScheme(@JsonProperty(required = true) StreetScheme[] streets) {
 }
