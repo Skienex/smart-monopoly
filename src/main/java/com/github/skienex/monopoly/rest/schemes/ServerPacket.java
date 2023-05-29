@@ -11,10 +11,12 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = ServerPacket.Error.class, name = "ERROR"),
         @JsonSubTypes.Type(value = ServerPacket.Debug.class, name = "DEBUG"),
         @JsonSubTypes.Type(value = ServerPacket.Login.class, name = "LOGIN"),
-        @JsonSubTypes.Type(value = ServerPacket.StartGame.class, name = "START_GAME"),
-        @JsonSubTypes.Type(value = ServerPacket.FieldData.class, name = "FIELD_DATA"),
+        @JsonSubTypes.Type(value = ServerPacket.UpdatePlayers.class, name = "UPDATE_PLAYERS"), // Bei jedem Login wird eine Map aller Spieler gesendet (fürs GUI)
+        @JsonSubTypes.Type(value = ServerPacket.StartGame.class, name = "START_GAME"), // Alle Spieler werden gesendet (ab dem Zeitpunkt unveränderlich) -> Das Spiel beginnt
+        @JsonSubTypes.Type(value = ServerPacket.ActivePlayer.class, name = "ACTIVE_PLAYER"), // Bei jeder Aktion mitsenden
         @JsonSubTypes.Type(value = ServerPacket.Roll.class, name = "ROLL"),
         @JsonSubTypes.Type(value = ServerPacket.MovePlayer.class, name = "MOVE_PLAYER"),
+        @JsonSubTypes.Type(value = ServerPacket.FieldData.class, name = "FIELD_DATA"),
 })
 public abstract class ServerPacket {
     public static class Error extends ServerPacket {
@@ -43,6 +45,14 @@ public abstract class ServerPacket {
         }
     }
 
+    public static class UpdatePlayers extends ServerPacket {
+        public final Map<UUID, String> players;
+
+        public UpdatePlayers(Map<UUID, String> players) {
+            this.players = players;
+        }
+    }
+
     public static class StartGame extends ServerPacket {
         public final Map<UUID, String> players;
 
@@ -51,11 +61,11 @@ public abstract class ServerPacket {
         }
     }
 
-    public static class FieldData extends ServerPacket {
-        public final com.github.skienex.monopoly.game.FieldData data;
+    public static class ActivePlayer extends ServerPacket {
+        public final UUID id;
 
-        public FieldData(com.github.skienex.monopoly.game.FieldData data) {
-            this.data = data;
+        public ActivePlayer(UUID id) {
+            this.id = id;
         }
     }
 
@@ -77,10 +87,20 @@ public abstract class ServerPacket {
     public static class MovePlayer extends ServerPacket {
         public final UUID id;
         public final int position;
+        public final int oldPosition;
 
-        public MovePlayer(UUID id, int position) {
+        public MovePlayer(UUID id, int position, int oldPosition) {
             this.id = id;
             this.position = position;
+            this.oldPosition = oldPosition;
+        }
+    }
+
+    public static class FieldData extends ServerPacket {
+        public final com.github.skienex.monopoly.game.FieldData data;
+
+        public FieldData(com.github.skienex.monopoly.game.FieldData data) {
+            this.data = data;
         }
     }
 }
