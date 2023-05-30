@@ -8,6 +8,7 @@ import com.github.skienex.monopoly.util.json.VariablesScheme;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class GameManager {
     private final Dice dice = new Dice();
@@ -27,7 +28,7 @@ public class GameManager {
     public static GameManager create() {
         try {
             return new GameManager(getJSONVariables());
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -126,12 +127,63 @@ public class GameManager {
         return Status.NOT_YOUR_STREET;
     }
 
-    public Status buyHouse() {
-        return Status.PLACEHOLDER;
+    public Status buyHouse(int index, Player player) {
+        Street street = streets[index];
+        if (street.owner() != player) {
+            return Status.NOT_YOUR_STREET;
+        }
+        if (street.level() == 6) {
+            // TODO: Diese Straße ist maxed
+            return Status.PLACEHOLDER;
+        }
+        if (player.getMoney() < street.cost()[street.level()]) {
+            return Status.NOT_ENOUGH_MONEY;
+        }
+        int nextLevel = street.level() + 1;
+        for (Street street1 : streets) {
+            if (street1.group() != street.group()) {
+                continue;
+            }
+            if (street1.owner() != player) {
+                // TODO: Status "Du besitzt nicht alle Straßen dieser Farbgruppe"
+                return Status.PLACEHOLDER;
+            }
+            if (Math.abs(street1.level() - nextLevel) > 1) {
+                // TODO: Du musst zuerst die anderen Häuser bauen
+                return Status.PLACEHOLDER;
+            }
+        }
+        player.subtractMoney(street.cost()[street.level()]);
+        street.levelUp();
+        return Status.SUCCESS;
     }
 
-    public Status sellHouse() {
-        return Status.PLACEHOLDER;
+    public Status sellHouse(int index, Player player) {
+        Street street = streets[index];
+        if (street.owner() != player) {
+            return Status.NOT_YOUR_STREET;
+        }
+        if (street.level() < 2) {
+            // TODO: Es gibt bereits keine Häuser mehr
+            return Status.PLACEHOLDER;
+        }
+        int nextLevel = street.level() + 1;
+        for (Street street1 : streets) {
+            if (street1.group() != street.group()) {
+                continue;
+            }
+            if (street1.owner() != player) {
+                // TODO: Status "Du besitzt nicht alle Straßen dieser Farbgruppe"
+                return Status.PLACEHOLDER;
+            }
+            if (Math.abs(street1.level() - nextLevel) > 1) {
+                // TODO: Du musst zuerst die andere Häuser abbauen
+                return Status.PLACEHOLDER;
+            }
+        }
+        player.addMoney((street.cost()[street.level()] / 2));
+        street.levelDown();
+        return Status.SUCCESS;
     }
 
     public boolean hasStarted() {
