@@ -167,7 +167,7 @@ public class GameManager {
             // TODO: Es gibt bereits keine Häuser mehr
             return Status.PLACEHOLDER;
         }
-        int nextLevel = street.level() + 1;
+        int nextLevel = street.level() - 1;
         for (Street street1 : streets) {
             if (street1.group() != street.group()) {
                 continue;
