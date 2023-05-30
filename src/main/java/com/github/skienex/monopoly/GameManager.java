@@ -95,6 +95,7 @@ public class GameManager {
                     street.cost()[street.level() - 1], street.cost()[street.level() - 1] / 2, false);
         } else {
             if (street.owner() != null) {
+                payRent(player);
                 return new FieldData.OwnedByOtherPlayer(pos, street.name(), street.owner().getId(),
                         street.rent()[street.level() - 1]);
             }
@@ -102,8 +103,8 @@ public class GameManager {
         }
     }
 
-    public Status payRent(int index, Player player) {
-        Street street = streets[index];
+    public Status payRent(Player player) {
+        Street street = streets[player.getPosition()];
         if (street.owner() == player) {
             return Status.YOUR_STREET;
         }
@@ -111,14 +112,13 @@ public class GameManager {
             return Status.NOT_ENOUGH_MONEY;
             // TODO: Möglichkeit Straßen/Häuser zu verkaufen anzeigen
         }
-        player.subtractMoney(street.cost()[street.level() - 1]);
-        street.levelUp();
-        street.owner(player);
+        player.subtractMoney(street.rent()[street.level() - 1]);
+
         return Status.SUCCESS;
     }
 
-    public Status buyStreet(int index, Player player) {
-        Street street = streets[index];
+    public Status buyStreet(Player player) {
+        Street street = streets[player.getPosition()];
         if (player.getMoney() < street.cost()[0]) {
             return Status.NOT_ENOUGH_MONEY;
         }
@@ -131,8 +131,8 @@ public class GameManager {
         return Status.SUCCESS;
     }
 
-    public Status sellStreet(int index, Player player) {
-        Street street = streets[index];
+    public Status sellStreet(Player player) {
+        Street street = streets[player.getPosition()];
         if (street.owner() == player && street.level() > 0) {
             player.addMoney((street.cost()[0] / 2));
             street.owner(null);
@@ -142,8 +142,8 @@ public class GameManager {
         return Status.NOT_YOUR_STREET;
     }
 
-    public Status buyHouse(int index, Player player) {
-        Street street = streets[index];
+    public Status buyHouse(Player player) {
+        Street street = streets[player.getPosition()];
         if (street.owner() != player) {
             return Status.NOT_YOUR_STREET;
         }
@@ -170,8 +170,8 @@ public class GameManager {
         return Status.SUCCESS;
     }
 
-    public Status sellHouse(int index, Player player) {
-        Street street = streets[index];
+    public Status sellHouse(Player player) {
+        Street street = streets[player.getPosition()];
         if (street.owner() != player) {
             return Status.NOT_YOUR_STREET;
         }
@@ -193,6 +193,12 @@ public class GameManager {
         player.addMoney(street.cost()[street.level()] / 2);
         street.levelDown();
         return Status.SUCCESS;
+    }
+
+    public String specialField(Player player) {
+        Random random = new Random();
+
+        return variables.specialActions()[random.nextInt(Integer.parseInt("21"))];
     }
 
     public boolean hasStarted() {

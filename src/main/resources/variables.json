@@ -237,5 +237,29 @@
       "rent": [500, 700, 1000, 1250, 1500, 2250],
       "group": "NONE"
     }
+  ],
+  "specialActions": [
+    "Special Field 1",
+    "Special Field 2",
+    "Special Field 3",
+    "Special Field 4",
+    "Special Field 5",
+    "Special Field 6",
+    "Special Field 7",
+    "Special Field 8",
+    "Special Field 9",
+    "Special Field 10",
+    "Special Field 11",
+    "Special Field 12",
+    "Special Field 13",
+    "Special Field 14",
+    "Special Field 15",
+    "Special Field 16",
+    "Special Field 17",
+    "Special Field 18",
+    "Special Field 19",
+    "Special Field 20",
+    "Special Field 21",
+    "Special Field 22"
   ]
 }

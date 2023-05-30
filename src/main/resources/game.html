@@ -7,13 +7,16 @@
 <body>
 <label><input id="username" type="text" placeholder="Username"></label>
 <br>
-<label><textarea id="log" style="width: 100%; height: 90vh; box-sizing: border-box; font-size: 150%;"
-                 disabled></textarea></label>
+<label><textarea id="log" style="width: 100%; height: 90vh; box-sizing: border-box; font-size: 150%;" disabled></textarea></label>
 <br>
 <button id="connect" onclick="clickConnect()">Connect</button>
 <button id="login" onclick="clickLogin()" disabled>Login</button>
 <button id="start" onclick="clickStartGame()" disabled>Start Game</button>
 <button id="roll" onclick="clickRollDice()" disabled>Roll Dice</button>
+<button id="buy_street" onclick="clickBuyStreet()" disabled>Buy Street</button>
+<button id="sell_street" onclick="clickSellStreet()" disabled>Sell Street</button>
+<button id="buy_house" onclick="clickBuyHouse()" disabled>Buy House</button>
+<button id="sell_house" onclick="clickSellHouse()" disabled>Sell House</button>
 
 <script>
     function buildPacket(type, data) {
@@ -34,6 +37,10 @@
     const login = document.getElementById("login")
     const start = document.getElementById("start")
     const roll = document.getElementById("roll")
+    const buy_street = document.getElementById("buy_street")
+    const sell_street = document.getElementById("sell_street")
+    const buy_house = document.getElementById("buy_house")
+    const sell_house = document.getElementById("sell_house")
 
     const callbacks = {
         'ERROR': (packet) => {
@@ -124,6 +131,27 @@
 
     function clickRollDice() {
         con.socket.send(buildPacket('ROLL_DICE', {}))
+
+        buy_street.disabled = false
+        sell_street.disabled = false
+        buy_house.disabled = false
+        sell_house.disabled = false
+    }
+
+    function clickBuyStreet() {
+        con.socket.send(buildPacket('BUY_STREET', {}))
+    }
+
+    function clickSellStreet() {
+        con.socket.send(buildPacket('SELL_STREET', {}))
+    }
+
+    function clickBuyHouse() {
+        con.socket.send(buildPacket('BUY_HOUSE', {}))
+    }
+
+    function clickSellHouse() {
+        con.socket.send(buildPacket('SELL_HOUSE', {}))
     }
 </script>
 </body>

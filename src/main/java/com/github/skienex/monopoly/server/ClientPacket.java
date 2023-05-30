@@ -11,13 +11,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ClientPacket.Login.class, name = "LOGIN"),
         @JsonSubTypes.Type(value = ClientPacket.StartGame.class, name = "START_GAME"),
         @JsonSubTypes.Type(value = ClientPacket.RollDice.class, name = "ROLL_DICE"),
-        @JsonSubTypes.Type(value = ClientPacket.PayRent.class, name = "PAY_RENT"),
-        @JsonSubTypes.Type(value = ClientPacket.GetRent.class, name = "GET_RENT"),
         @JsonSubTypes.Type(value = ClientPacket.BuyStreet.class, name = "BUY_STREET"),
         @JsonSubTypes.Type(value = ClientPacket.SellStreet.class, name = "SELL_STREET"), // Straße komplett verkaufen
         @JsonSubTypes.Type(value = ClientPacket.BuyHouse.class, name = "BUY_HOUSE"),
         @JsonSubTypes.Type(value = ClientPacket.SellHouse.class, name = "SELL_HOUSE"),
-        @JsonSubTypes.Type(value = ClientPacket.SpecialField.class, name = "SPECIAL_FIELD"),
 })
 public abstract class ClientPacket {
     public static class KeepAlive extends ClientPacket {
@@ -38,12 +35,6 @@ public abstract class ClientPacket {
     public static class RollDice extends ClientPacket {
     }
 
-    public static class PayRent extends ClientPacket {
-    }
-
-    public static class GetRent extends ClientPacket {
-    }
-
     public static class BuyStreet extends ClientPacket {
     }
 
@@ -54,8 +45,5 @@ public abstract class ClientPacket {
     }
 
     public static class SellHouse extends ClientPacket {
-    }
-
-    public static class SpecialField extends ClientPacket {
     }
 }
