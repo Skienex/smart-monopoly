@@ -181,7 +181,7 @@ public class GameManager {
                 return Status.PLACEHOLDER;
             }
         }
-        player.addMoney((street.cost()[street.level()] / 2));
+        player.addMoney(street.cost()[street.level()] / 2);
         street.levelDown();
         return Status.SUCCESS;
     }
