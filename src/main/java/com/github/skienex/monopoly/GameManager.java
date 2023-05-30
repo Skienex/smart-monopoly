@@ -8,17 +8,18 @@ import com.github.skienex.monopoly.util.json.VariablesScheme;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 public class GameManager {
     private final Dice dice = new Dice();
     private final Map<UUID, Integer> playerIndices = new HashMap<>();
     private final List<Player> players = new ArrayList<>();
+    private final VariablesScheme variables;
     private final Street[] streets = new Street[40];
     private boolean started;
     private int activePlayer;
 
     private GameManager(VariablesScheme variablesScheme) {
+        this.variables = variablesScheme;
         for (int i = 0; i < variablesScheme.streets().length; i++) {
             StreetScheme scheme = variablesScheme.streets()[i];
             streets[i] = new Street(scheme.name(), scheme.cost(), scheme.rent(), scheme.group());
@@ -61,20 +62,20 @@ public class GameManager {
         return player;
     }
 
-    public Player getActivePlayer() {
+    public Player activePlayer() {
         return players.get(activePlayer);
     }
 
-    public Dice getDice() {
+    public Dice dice() {
         return dice;
     }
 
+    public VariablesScheme variables() {
+        return variables;
+    }
+
     public void move(Player player, Dice.Roll roll) {
-        // TODO: Show roll numbers (number 1 and 2)
         player.addPosition(roll.value());
-        System.out.println("Position: " + player.getPosition());
-        // TODO: Move player to field
-        FieldManager.fieldManager(this, player);
     }
 
     public FieldData fieldData(Player player) {
@@ -86,20 +87,34 @@ public class GameManager {
         } else if (street.owner() == player) {
             if (street.level() == 6) {
                 return new FieldData.OwnedByPlayer(pos,
-                        street.name(), player.getId(), street.rent()[1],
-                        -1, street.cost()[5] - 1, true);
+                        street.name(), player.getId(), street.rent()[1], -1, street.cost()[5] / 2, true);
             }
             // Spieler bestitz Feld schon
             return new FieldData.OwnedByPlayer(pos,
-                    street.name(), player.getId(), street.rent()[1],
-                    street.cost()[street.level()], street.cost()[street.level()] - 1, false);
+                    street.name(), player.getId(), street.rent()[street.level() - 1],
+                    street.cost()[street.level() - 1], street.cost()[street.level() - 1] / 2, false);
         } else {
             if (street.owner() != null) {
                 return new FieldData.OwnedByOtherPlayer(pos, street.name(), street.owner().getId(),
-                        street.rent()[1]);
+                        street.rent()[street.level() - 1]);
             }
             return new FieldData.Free(pos, street.name(), street.cost()[0]);
         }
+    }
+
+    public Status payRent(int index, Player player) {
+        Street street = streets[index];
+        if (street.owner() == player) {
+            return Status.YOUR_STREET;
+        }
+        if (player.getMoney() < street.rent()[street.level() - 1]) {
+            return Status.NOT_ENOUGH_MONEY;
+            // TODO: Möglichkeit Straßen/Häuser zu verkaufen anzeigen
+        }
+        player.subtractMoney(street.cost()[street.level() - 1]);
+        street.levelUp();
+        street.owner(player);
+        return Status.SUCCESS;
     }
 
     public Status buyStreet(int index, Player player) {
@@ -133,8 +148,7 @@ public class GameManager {
             return Status.NOT_YOUR_STREET;
         }
         if (street.level() == 6) {
-            // TODO: Diese Straße ist maxed
-            return Status.PLACEHOLDER;
+            return Status.STREET_MAXED;
         }
         if (player.getMoney() < street.cost()[street.level()]) {
             return Status.NOT_ENOUGH_MONEY;
@@ -145,12 +159,10 @@ public class GameManager {
                 continue;
             }
             if (street1.owner() != player) {
-                // TODO: Status "Du besitzt nicht alle Straßen dieser Farbgruppe"
-                return Status.PLACEHOLDER;
+                return Status.INCOMPLETE_GROUP;
             }
             if (Math.abs(street1.level() - nextLevel) > 1) {
-                // TODO: Du musst zuerst die anderen Häuser bauen
-                return Status.PLACEHOLDER;
+                return Status.DISMANTLE_OTHER_THINKS_FIRST;
             }
         }
         player.subtractMoney(street.cost()[street.level()]);
@@ -164,8 +176,7 @@ public class GameManager {
             return Status.NOT_YOUR_STREET;
         }
         if (street.level() < 2) {
-            // TODO: Es gibt bereits keine Häuser mehr
-            return Status.PLACEHOLDER;
+            return Status.NO_HOUSE_ON_STREET;
         }
         int nextLevel = street.level() - 1;
         for (Street street1 : streets) {
@@ -173,12 +184,10 @@ public class GameManager {
                 continue;
             }
             if (street1.owner() != player) {
-                // TODO: Status "Du besitzt nicht alle Straßen dieser Farbgruppe"
-                return Status.PLACEHOLDER;
+                return Status.INCOMPLETE_GROUP;
             }
             if (Math.abs(street1.level() - nextLevel) > 1) {
-                // TODO: Du musst zuerst die andere Häuser abbauen
-                return Status.PLACEHOLDER;
+                return Status.DISMANTLE_OTHER_THINKS_FIRST;
             }
         }
         player.addMoney(street.cost()[street.level()] / 2);

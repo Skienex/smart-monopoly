@@ -38,12 +38,12 @@ public class PlayerSocket {
     @OnMessage
     public void onMessage(ClientPacket packet, WebSocketSession session) {
         switch (packet) {
+            case ClientPacket.KeepAlive keepAlive -> {}
             case ClientPacket.Login login -> {
                 boolean admin;
                 UUID id;
                 synchronized (lock) {
                     if (sessions.containsKey(session)) {
-                        // TODO: bereits eingeloggt
                         session.sendAsync(ServerPacket.error(Status.ALREADY_LOGGED_IN));
                         return;
                     }
@@ -59,14 +59,12 @@ public class PlayerSocket {
                         }
                     }
                     if (manager.hasStarted()) {
-                        // TODO: Spiel bereits gestartet
                         session.sendAsync(ServerPacket.error(Status.GAME_ALREADY_STARTED));
                         return;
                     }
                     Player player = manager.addPlayer(id);
                     player.setAdmin(admin);
                 }
-                // TODO: Erfolg melden
                 session.sendAsync(new ServerPacket.Login(admin, id));
                 broadcaster.broadcastAsync(new ServerPacket.UpdatePlayers(names));
             }
@@ -74,30 +72,25 @@ public class PlayerSocket {
                 synchronized (lock) {
                     UUID id = sessions.get(session);
                     if (id == null) {
-                        // TODO: nicht eingeloggt
                         session.sendAsync(ServerPacket.error(Status.NOT_LOGGED_IN));
                         return;
                     }
                     if (manager == null) {
-                        // TODO: kein manager existiert
                         session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
                         return;
                     }
                     if (manager.hasStarted()) {
-                        // TODO: game bereits gestartet
                         session.sendAsync(ServerPacket.error(Status.GAME_ALREADY_STARTED));
                         return;
                     }
                     Player player = manager.getPlayer(id);
                     if (!player.isAdmin()) {
-                        // TODO: kein admin
                         session.sendAsync(ServerPacket.error(Status.NO_PERMISSION));
                         return;
                     }
                     manager.startGame();
+                    broadcaster.broadcastAsync(new ServerPacket.StartGame(names, manager.variables()));
                 }
-                // TODO: start with first move
-                broadcaster.broadcastAsync(new ServerPacket.StartGame(names));
             }
             case ClientPacket.RollDice rollDice -> {
                 synchronized (lock) {
@@ -106,12 +99,12 @@ public class PlayerSocket {
                         return;
                     }
                     UUID id = sessions.get(session);
-                    Player activePlayer = manager.getActivePlayer();
+                    Player activePlayer = manager.activePlayer();
                     if (!activePlayer.getId().equals(id)) {
                         session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
                     }
-                    Dice.Roll roll = manager.getDice().roll();
+                    Dice.Roll roll = manager.dice().roll();
                     final int old_position = manager.getPlayer(activePlayer.getId()).getPosition();
                     session.sendAsync(new ServerPacket.Roll(id, roll.firstNumber(), roll.secondNumber()));
                     manager.move(activePlayer, roll);
@@ -126,6 +119,23 @@ public class PlayerSocket {
                 }
             }
             case ClientPacket.PayRent payRent -> {
+                synchronized (lock) {
+                    if (manager == null) {
+                        session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
+                        return;
+                    }
+                    UUID id = sessions.get(session);
+                    Player activePlayer = manager.activePlayer();
+                    if (!activePlayer.getId().equals(id)) {
+                        session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
+                        return;
+                    }
+                    Status status = manager.payRent(activePlayer.getPosition(), activePlayer);
+                    if (status != Status.SUCCESS) {
+                        session.sendAsync(ServerPacket.error(status));
+                        return;
+                    }
+                }
             }
             case ClientPacket.GetRent getRent -> {
             }
@@ -136,7 +146,7 @@ public class PlayerSocket {
                         return;
                     }
                     UUID id = sessions.get(session);
-                    Player activePlayer = manager.getActivePlayer();
+                    Player activePlayer = manager.activePlayer();
                     if (!activePlayer.getId().equals(id)) {
                         session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
@@ -155,7 +165,7 @@ public class PlayerSocket {
                         return;
                     }
                     UUID id = sessions.get(session);
-                    Player activePlayer = manager.getActivePlayer();
+                    Player activePlayer = manager.activePlayer();
                     if (!activePlayer.getId().equals(id)) {
                         session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
@@ -179,6 +189,6 @@ public class PlayerSocket {
 
     @OnClose
     public void onClose(WebSocketSession session) {
-        // TODO
+        // TODO: Mark session as closed and reset all streets from the player and set money to 0.
     }
 }

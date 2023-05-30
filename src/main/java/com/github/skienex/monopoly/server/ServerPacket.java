@@ -3,6 +3,7 @@ package com.github.skienex.monopoly.server;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.skienex.monopoly.game.Status;
+import com.github.skienex.monopoly.util.json.VariablesScheme;
 
 import java.util.Map;
 import java.util.UUID;
@@ -62,9 +63,11 @@ public abstract class ServerPacket {
 
     public static class StartGame extends ServerPacket {
         public final Map<UUID, String> players;
+        public final VariablesScheme variables;
 
-        public StartGame(Map<UUID, String> players) {
+        public StartGame(Map<UUID, String> players, VariablesScheme variables) {
             this.players = players;
+            this.variables = variables;
         }
     }
 

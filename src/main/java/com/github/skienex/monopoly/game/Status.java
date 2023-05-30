@@ -14,6 +14,12 @@ public enum Status {
     STREET_NOT_BUYABLE("Street is not buyable"),
     STREET_ALREADY_OWNED("Street is already owned by another player"),
     PACKET_NOT_IMPLEMENTED("Packet not implemented yet"),
+    YOUR_STREET("This is your street!"),
+    STREET_MAXED("This street is already maxed"),
+    INCOMPLETE_GROUP("You dont have to complete group of streets to do this"),
+    BUILD_OTHER_BUILDINGS_FIRST("You have to build other thinks first"),
+    DISMANTLE_OTHER_THINKS_FIRST("You have to dismantle other thinks first"),
+    NO_HOUSE_ON_STREET("You dont have a house to dismantle on this street"),
     PLACEHOLDER("PLACEHOLDER");
 
     private final String message;
