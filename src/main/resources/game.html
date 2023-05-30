@@ -5,17 +5,21 @@
     <title>Title</title>
 </head>
 <body>
-<label><textarea id="log" rows="15" cols="70" disabled></textarea></label>
+<label><input id="username" type="text" placeholder="Username"></label>
 <br>
-<button onclick="clickConnect()" id="connect">Connect</button>
-<button onclick="clickLogin()" id="login" disabled>Login</button>
-<button onclick="clickStartGame()" id="start" disabled>Start Game</button>
-<button onclick="clickRollDice()" id="roll" disabled>Roll Dice</button>
+<label><textarea id="log" style="width: 100%; height: 90vh; box-sizing: border-box; font-size: 150%;"
+                 disabled></textarea></label>
+<br>
+<button id="connect" onclick="clickConnect()">Connect</button>
+<button id="login" onclick="clickLogin()" disabled>Login</button>
+<button id="start" onclick="clickStartGame()" disabled>Start Game</button>
+<button id="roll" onclick="clickRollDice()" disabled>Roll Dice</button>
 
 <script>
     function buildPacket(type, data) {
         return JSON.stringify({type: type, ...data})
     }
+    const keepAlive = buildPacket("KEEP_ALIVE", {})
 
     const con = {
         socket: undefined,
@@ -25,6 +29,7 @@
 
     const log = document.getElementById("log")
     log.value = ''
+    const username = document.getElementById("username")
     const connect = document.getElementById("connect")
     const login = document.getElementById("login")
     const start = document.getElementById("start")
@@ -38,11 +43,12 @@
             log.value += `Debug: ${packet.message}\n`
         },
         'LOGIN': (packet) => {
-            log.value += `Logged in {admin: ${packet.admin}, UUID: ${packet.yourId}}\n`
+            log.value += `Logged in: admin = ${packet.admin}, id = ${packet.yourId}\n`
             state = {
                 yourId: packet.yourId,
                 admin: packet.admin,
                 active: false,
+                playerNames: {},
             }
             if (state.admin) {
                 start.disabled = false
@@ -50,21 +56,22 @@
         },
         'UPDATE_PLAYERS': (packet) => {
             log.value += `Updated players: ${JSON.stringify(packet.players)}\n`
+            state.playerNames = packet.players
         },
         'START_GAME': (packet) => {
             log.value += `Started game: ${JSON.stringify(packet.players)}\n`
             roll.disabled = false
         },
         'ACTIVE_PLAYER': (packet) => {
-            log.value += `Active player: ${packet.id}\n`
-            state.active = roll.disabled = packet.id === state.yourId
+            log.value += `Active player: ${state.playerNames[packet.id]}\n`
+            state.active = (roll.disabled = packet.id === state.yourId)
         },
         'ROLL': (packet) => {
             const pasch = packet.first === packet.second
             log.value += `Roll: ${packet.first}, ${packet.second}, pasch: ${pasch}, UUID: ${packet.id}\n`
         },
         'MOVE_PLAYER': (packet) => {
-            log.value += `Moved player: ${packet.id}, ${packet.position}, ${packet.oldPosition}\n`
+            log.value += `Moved player: ${state.playerNames[packet.id]}, ${packet.position}, ${packet.oldPosition}\n`
         },
         'FIELD_DATA': (packet) => {
             log.value += `Field data: ${JSON.stringify(packet.data)}\n`
@@ -82,6 +89,13 @@
             login.disabled = false
             con.connected = true
             log.value += 'Connected\n'
+            setInterval(id => {
+                if (!con.connected) {
+                    clearInterval(id)
+                    return
+                }
+                con.socket.send(keepAlive)
+            }, 1000 * 30)
         }
         con.socket.onmessage = (event) => {
             const packet = JSON.parse(event.data)
@@ -100,7 +114,7 @@
 
     function clickLogin() {
         login.disabled = true
-        con.socket.send(buildPacket('LOGIN', {name: 'Skienex'}))
+        con.socket.send(buildPacket('LOGIN', {name: username.value}))
     }
 
     function clickStartGame() {
