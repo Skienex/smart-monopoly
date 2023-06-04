@@ -47,6 +47,9 @@ public class PlayerSocket {
                         session.sendAsync(ServerPacket.error(Status.ALREADY_LOGGED_IN));
                         return;
                     }
+                    if (login.name.isBlank()) {
+                        session.sendAsync(ServerPacket.error(Status.NO_NAME_DEFINED));
+                    }
                     id = UUID.randomUUID();
                     sessions.put(session, id);
                     names.put(id, login.name);
@@ -149,11 +152,12 @@ public class PlayerSocket {
                         session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
                     }
-                    Status status = manager.buyStreet(activePlayer);
-                    if (status != Status.SUCCESS) {
-                        session.sendAsync(ServerPacket.error(status));
-                        return;
-                    }
+                    String status = manager.buyStreet(activePlayer);
+//                    if (status != Status.SUCCESS) {
+//                        session.sendAsync(ServerPacket.error(status));
+//                        return;
+//                    }
+                    session.sendAsync(new ServerPacket.Debug(status));
                 }
             }
             case ClientPacket.SellStreet sellStreet -> {

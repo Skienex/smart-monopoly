@@ -117,18 +117,18 @@ public class GameManager {
         return Status.SUCCESS;
     }
 
-    public Status buyStreet(Player player) {
+    public String buyStreet(Player player) {
         Street street = streets[player.getPosition()];
         if (player.getMoney() < street.cost()[0]) {
-            return Status.NOT_ENOUGH_MONEY;
+            return "Money: " + player.getMoney();
         }
         if (street.level() > 0) {
-            return Status.STREET_ALREADY_OWNED;
+            return "Street level: " + street.level();
         }
         player.subtractMoney(street.cost()[0]);
         street.levelUp();
         street.owner(player);
-        return Status.SUCCESS;
+        return "Erfolg!";
     }
 
     public Status sellStreet(Player player) {
