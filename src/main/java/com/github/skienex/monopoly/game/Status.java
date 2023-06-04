@@ -1,4 +1,5 @@
 package com.github.skienex.monopoly.game;
+
 public enum Status {
     SUCCESS("Success"),
     ALREADY_LOGGED_IN("You are already logged in"),

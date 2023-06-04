@@ -38,7 +38,8 @@ public class PlayerSocket {
     @OnMessage
     public void onMessage(ClientPacket packet, WebSocketSession session) {
         switch (packet) {
-            case ClientPacket.KeepAlive keepAlive -> {}
+            case ClientPacket.KeepAlive keepAlive -> {
+            }
             case ClientPacket.Login login -> {
                 boolean admin;
                 UUID id;
