@@ -92,7 +92,7 @@ public class GameManager {
             // Spieler bestitz Feld schon
             return new FieldData.OwnedByPlayer(pos,
                     street.name(), player.getId(), street.rent()[street.level() - 1],
-                    street.cost()[street.level() - 1], street.cost()[street.level() - 1] / 2, false);
+                    street.cost()[street.level()], street.cost()[street.level() - 1] / 2, false);
         } else {
             if (street.owner() != null) {
                 payRent(player);
@@ -117,18 +117,18 @@ public class GameManager {
         return Status.SUCCESS;
     }
 
-    public String buyStreet(Player player) {
+    public Status buyStreet(Player player) {
         Street street = streets[player.getPosition()];
         if (player.getMoney() < street.cost()[0]) {
-            return "Money: " + player.getMoney();
+            return Status.NOT_ENOUGH_MONEY;
         }
         if (street.level() > 0) {
-            return "Street level: " + street.level();
+            return Status.STREET_ALREADY_OWNED;
         }
         player.subtractMoney(street.cost()[0]);
         street.levelUp();
         street.owner(player);
-        return "Erfolg!";
+        return Status.SUCCESS;
     }
 
     public Status sellStreet(Player player) {

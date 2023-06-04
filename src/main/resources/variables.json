@@ -8,13 +8,13 @@
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "BROWN"
     },
     {
       "name": "Vishnu Straße",
       "cost": [1000 , 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "BROWN"
     },
     {
       "name": "Jonte Straße",

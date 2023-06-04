@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes(value = {
+        @JsonSubTypes.Type(value = ServerPacket.StatusPacket.class, name = "STATUS"),
         @JsonSubTypes.Type(value = ServerPacket.Error.class, name = "ERROR"),
         @JsonSubTypes.Type(value = ServerPacket.Debug.class, name = "DEBUG"),
         @JsonSubTypes.Type(value = ServerPacket.Login.class, name = "LOGIN"),
@@ -19,10 +20,27 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = ServerPacket.Roll.class, name = "ROLL"),
         @JsonSubTypes.Type(value = ServerPacket.MovePlayer.class, name = "MOVE_PLAYER"),
         @JsonSubTypes.Type(value = ServerPacket.FieldData.class, name = "FIELD_DATA"),
+        @JsonSubTypes.Type(value = ServerPacket.Money.class, name = "MONEY"),
 })
 public abstract class ServerPacket {
+    public static ServerPacket status(Status status) {
+        return new ServerPacket.StatusPacket(status == Status.SUCCESS, status.name(), status.message());
+    }
+
     public static ServerPacket error(Status status) {
         return new ServerPacket.Error(status.name(), status.message());
+    }
+
+    public static class StatusPacket extends ServerPacket {
+        public final boolean success;
+        public final String id;
+        public final String message;
+
+        public StatusPacket(boolean success, String id, String message) {
+            this.success = success;
+            this.id = id;
+            this.message = message;
+        }
     }
 
     public static class Error extends ServerPacket {
@@ -111,6 +129,14 @@ public abstract class ServerPacket {
 
         public FieldData(com.github.skienex.monopoly.game.FieldData data) {
             this.data = data;
+        }
+    }
+
+    public static class Money extends ServerPacket {
+        public final int money;
+
+        public Money(int money) {
+            this.money = money;
         }
     }
 }

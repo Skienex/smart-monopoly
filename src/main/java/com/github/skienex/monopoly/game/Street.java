@@ -35,7 +35,7 @@ public class Street {
         return owner;
     }
 
-    public void owner(Player player) {
+    public void owner(Player owner) {
         this.owner = owner;
     }
 
