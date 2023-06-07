@@ -3,6 +3,7 @@ package com.github.skienex.monopoly.server;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.skienex.monopoly.game.Status;
+import com.github.skienex.monopoly.game.Street;
 import com.github.skienex.monopoly.util.json.VariablesScheme;
 
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes(value = {
+        @JsonSubTypes.Type(value = ServerPacket.Handshake.class, name = "HANDSHAKE"),
         @JsonSubTypes.Type(value = ServerPacket.StatusPacket.class, name = "STATUS"),
         @JsonSubTypes.Type(value = ServerPacket.Error.class, name = "ERROR"),
         @JsonSubTypes.Type(value = ServerPacket.Debug.class, name = "DEBUG"),
@@ -20,9 +22,14 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = ServerPacket.Roll.class, name = "ROLL"),
         @JsonSubTypes.Type(value = ServerPacket.MovePlayer.class, name = "MOVE_PLAYER"),
         @JsonSubTypes.Type(value = ServerPacket.FieldData.class, name = "FIELD_DATA"),
+        @JsonSubTypes.Type(value = ServerPacket.FieldAction.class, name = "FIELD_ACTION"),
         @JsonSubTypes.Type(value = ServerPacket.Money.class, name = "MONEY"),
 })
 public abstract class ServerPacket {
+    public static class Handshake extends ServerPacket {
+        public String message = "Success";
+    }
+
     public static ServerPacket status(Status status) {
         return new ServerPacket.StatusPacket(status == Status.SUCCESS, status.name(), status.message());
     }
@@ -129,6 +136,14 @@ public abstract class ServerPacket {
 
         public FieldData(com.github.skienex.monopoly.game.FieldData data) {
             this.data = data;
+        }
+    }
+
+    public static class FieldAction extends ServerPacket {
+        public final Street street;
+
+        public FieldAction(Street street) {
+            this.street = street;
         }
     }
 

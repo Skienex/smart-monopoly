@@ -10,7 +10,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = FieldData.OwnedByPlayer.class, name = "OWNED_BY_PLAYER"),
         @JsonSubTypes.Type(value = FieldData.OwnedByOtherPlayer.class, name = "OWNED_BY_OTHER_PLAYER"),
         @JsonSubTypes.Type(value = FieldData.Free.class, name = "FREE"),
-        @JsonSubTypes.Type(value = FieldData.NoStreet.class, name = "NO_STREET"),
+        @JsonSubTypes.Type(value = FieldData.SpecialField.class, name = "NO_STREET"),
 })
 public abstract class FieldData {
     public static class OwnedByPlayer extends FieldData {
@@ -59,11 +59,11 @@ public abstract class FieldData {
         }
     }
 
-    public static class NoStreet extends FieldData {
+    public static class SpecialField extends FieldData {
         public final int id;
         public final String name;
 
-        public NoStreet(int id, String name) {
+        public SpecialField(int id, String name) {
             this.id = id;
             this.name = name;
         }

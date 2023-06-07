@@ -81,9 +81,14 @@ public class GameManager {
     public FieldData fieldData(Player player) {
         int pos = player.getPosition();
         Street street = streets[pos];
-        if (pos % 10 == 0) {
-            // Keine Straße und somit nicht bebaubar
-            return new FieldData.NoStreet(pos, street.name());
+        if (pos == 0) {
+            return new FieldData.SpecialField(pos, street.name());
+        } else if (pos == 10) {
+            return new FieldData.SpecialField(pos, street.name());
+        } else if (pos == 20) {
+            return new FieldData.SpecialField(pos, street.name());
+        } else if (pos == 30) {
+            return new FieldData.SpecialField(pos, street.name());
         } else if (street.owner() == player) {
             if (street.level() == 6) {
                 return new FieldData.OwnedByPlayer(pos,

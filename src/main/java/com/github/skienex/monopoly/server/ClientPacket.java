@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes(value = {
+        @JsonSubTypes.Type(value = ClientPacket.Handshake.class, name = "HANDSHAKE"),
         @JsonSubTypes.Type(value = ClientPacket.KeepAlive.class, name = "KEEP_ALIVE"),
         @JsonSubTypes.Type(value = ClientPacket.Login.class, name = "LOGIN"),
         @JsonSubTypes.Type(value = ClientPacket.StartGame.class, name = "START_GAME"),
@@ -17,6 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ClientPacket.SellHouse.class, name = "SELL_HOUSE"),
 })
 public abstract class ClientPacket {
+    public static class Handshake extends ClientPacket {
+    }
+
     public static class KeepAlive extends ClientPacket {
     }
 

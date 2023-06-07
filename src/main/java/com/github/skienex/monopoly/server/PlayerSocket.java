@@ -38,6 +38,9 @@ public class PlayerSocket {
     @OnMessage
     public void onMessage(ClientPacket packet, WebSocketSession session) {
         switch (packet) {
+            case ClientPacket.Handshake handshake -> {
+                session.sendAsync(new ServerPacket.Handshake());
+            }
             case ClientPacket.KeepAlive keepAlive -> {
             }
             case ClientPacket.Login login -> {
