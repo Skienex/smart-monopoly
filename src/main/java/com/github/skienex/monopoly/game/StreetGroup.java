@@ -9,5 +9,14 @@ public enum StreetGroup {
     RED,
     YELLOW,
     GREEN,
-    BLUE
+    DARK_BLUE,
+    OWNER_STREET,
+    TRAIN_STATION,
+    COMMUNITY_FIELD,
+    EVENT_FIELD,
+    TAX,
+    PRISON,
+    START,
+    FREE_PARKING,
+    GO_TO_PRISON
 }

@@ -2,7 +2,7 @@
   "streets": [
     {
       "name": "Los!",
-      "group": "NONE"
+      "group": "START"
     },
     {
       "name": "Badstraße",
@@ -18,43 +18,47 @@
     },
     {
       "name": "Turmstraße",
-      "cost": [60, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "cost": [60, 50, 50, 50, 50, 80],
+      "rent": [4, 20, 60, 180, 320, 450],
+      "mortgaged_sell": 30,
+      "mortgaged_rebuy": 33,
       "group": "BROWN"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Zusatzsteuern",
       "group": "TAX"
     },
     {
       "name": "Südbahnhof",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
+      "cost": [1000],
       "group": "TRAIN_STATION"
     },
     {
       "name": "Chausseestraße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "cost": [100, 50, 50, 50, 50, 120],
+      "rent": [6, 30, 90, 270, 400, 550],
+      "mortgaged_sell": 50,
+      "mortgaged_rebuy": 55,
       "group": "LIGHT_BLUE"
     },
     {
       "name": "Event",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
       "group": "EVENT_FIELD"
     },
     {
       "name": "Elisenstraße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "cost": [100, 50, 50, 50, 50, 120],
+      "rent": [6, 30, 90, 270, 400, 550],
+      "mortgaged_sell": 50,
+      "mortgaged_rebuy": 55,
       "group": "LIGHT_BLUE"
     },
     {
       "name": "Poststraße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "cost": [120, 50, 50, 50, 50, 120],
+      "rent": [8, 40, 100, 300, 450, 600],
+      "mortgaged_sell": 60,
+      "mortgaged_rebuy": 66,
       "group": "LIGHT_BLUE"
     },
     {
@@ -63,56 +67,67 @@
     },
     {
       "name": "Seestraße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "cost": [140, 100, 100, 100, 100, 160],
+      "rent": [10, 50, 150, 450, 625, 750],
+      "mortgaged_sell": 70,
+      "mortgaged_rebuy": 77,
       "group": "PURPLE"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Vishnu Straße",
+      "cost": [400, 250, 250, 250, 250, 400],
+      "rent": [60, 250, 600, 1400, 1600, 2000],
+      "mortgaged_sell": 225,
+      "mortgaged_rebuy": 275,
       "group": "OWNER_STREET"
     },
     {
       "name": "Hafenstraße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "cost": [140, 100, 100, 100, 100, 160],
+      "rent": [10, 50, 150, 450, 625, 750],
+      "mortgaged_sell": 70,
+      "mortgaged_rebuy": 77,
       "group": "PURPLE"
     },
     {
       "name": "Neue Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "cost": [160, 100, 100, 100, 100, 180],
+      "rent": [12, 60, 180, 500, 700, 900],
+      "mortgaged_sell": 80,
+      "mortgaged_rebuy": 88,
       "group": "PURPLE"
     },
     {
       "name": "Westbahnhof",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
       "group": "TRAIN_STATION"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Münchener Straße",
+      "cost": [180, 100, 100, 100, 100, 200],
+      "rent": [14, 70, 200, 550, 750, 950],
+      "mortgaged_sell": 90,
+      "mortgaged_rebuy": 99,
       "group": "ORANGE"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Community Chest",
       "group": "COMMUNITY_FIELD"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Wiener Straße",
+      "cost": [180, 100, 100, 100, 100, 200],
+      "rent": [14, 70, 200, 550, 750, 950],
+      "mortgaged_sell": 90,
+      "mortgaged_rebuy": 99,
       "group": "ORANGE"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Berliner Straße",
+      "cost": [200, 100, 100, 100, 100, 200],
+      "rent": [16, 80, 220, 600, 800, 1000],
+      "mortgaged_sell": 100,
+      "mortgaged_rebuy": 110,
       "group": "ORANGE"
     },
     {
@@ -120,56 +135,68 @@
       "group": "FREE_PARKING"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Theaterstraße",
+      "cost": [220, 150, 150, 150, 150, 240],
+      "rent": [18, 90, 250, 700, 875, 1050],
+      "mortgaged_sell": 110,
+      "mortgaged_rebuy": 121,
       "group": "RED"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Event",
       "group": "EVENT_FIELD"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Museumstraße",
+      "cost": [220, 150, 150, 150, 150, 240],
+      "rent": [18, 90, 250, 700, 875, 1050],
+      "mortgaged_sell": 110,
+      "mortgaged_rebuy": 121,
       "group": "RED "
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Opernplatz",
+      "cost": [240, 150, 150, 150, 150, 240],
+      "rent": [20, 100, 300, 750, 925, 1100],
+      "mortgaged_sell": 120,
+      "mortgaged_rebuy": 132,
       "group": "RED"
     },
     {
       "name": "Nordbahnhof",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
       "group": "TRAIN_STATION"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Lessingstraße",
+      "cost": [260, 150, 150, 150, 150, 240],
+      "rent": [22, 110, 330, 800, 975, 1150],
+      "mortgaged_sell": 130,
+      "mortgaged_rebuy": 143,
       "group": "YELLOW"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Schillerstraße",
+      "cost": [260, 150, 150, 150, 150, 240],
+      "rent": [22, 110, 330, 800, 975, 1150],
+      "mortgaged_sell": 130,
+      "mortgaged_rebuy": 143,
       "group": "YELLOW"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "OWNER_FIELD"
+      "name": "Jonte's Promenade",
+      "cost": [450, 300, 300, 300, 300, 450],
+      "rent": [100, 400, 800, 1600, 1800, 2250],
+      "mortgaged_sell": 250,
+      "mortgaged_rebuy": 300,
+      "group": "OWNER_STREET"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
+      "name": "Goethestraße",
+      "cost": [280, 150, 150, 150, 150, 240],
+      "rent": [24, 120, 360, 850, 1025, 1200],
+      "mortgaged_sell": 140,
+      "mortgaged_rebuy": 154,
       "group": "YELLOW"
     },
     {
@@ -177,82 +204,61 @@
       "group": "GO_TO_PRISON"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Rathausplatz",
+      "cost": [300, 200, 200, 200, 200, 300],
+      "rent": [26, 130, 390, 900, 1100, 1275],
+      "mortgaged_sell": 150,
+      "mortgaged_rebuy": 165,
       "group": "GREEN"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Hauptstraße",
+      "cost": [300, 200, 200, 200, 200, 300],
+      "rent": [26, 130, 390, 900, 1100, 1275],
+      "mortgaged_sell": 150,
+      "mortgaged_rebuy": 165,
       "group": "GREEN"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Community Chest",
       "group": "COMMUNITY_FIELD"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Bahnhofstraße",
+      "cost": [320, 200, 200, 200, 200, 300],
+      "rent": [28, 150, 450, 1000, 1200, 1400],
+      "mortgaged_sell": 160,
+      "mortgaged_rebuy": 176,
       "group": "GREEN"
     },
     {
       "name": "Hauptbahnhof",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
       "group": "TRAIN_STATION"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Event",
       "group": "EVENT_FIELD"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Parkstraße",
+      "cost": [350, 200, 200, 200, 200, 300],
+      "rent": [35, 175, 500, 1100, 1300, 1500],
+      "mortgaged_sell": 175,
+      "mortgaged_rebuy": 193,
       "group": "DARK_BLUE"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Zusatzsteuer",
       "group": "TAX"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "name": "Schlossallee",
+      "cost": [400, 250, 250, 250, 250, 350],
+      "rent": [50, 200, 600, 1400, 1700, 2000],
+      "mortgaged_sell": 200,
+      "mortgaged_rebuy": 220,
       "group": "DARK_BLUE"
     }
-  ],
-  "specialActions": [
-    "Special Field 1",
-    "Special Field 2",
-    "Special Field 3",
-    "Special Field 4",
-    "Special Field 5",
-    "Special Field 6",
-    "Special Field 7",
-    "Special Field 8",
-    "Special Field 9",
-    "Special Field 10",
-    "Special Field 11",
-    "Special Field 12",
-    "Special Field 13",
-    "Special Field 14",
-    "Special Field 15",
-    "Special Field 16",
-    "Special Field 17",
-    "Special Field 18",
-    "Special Field 19",
-    "Special Field 20",
-    "Special Field 21",
-    "Special Field 22"
   ]
 }

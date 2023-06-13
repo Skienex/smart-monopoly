@@ -17,12 +17,16 @@ public class GameManager {
     private final Street[] streets = new Street[40];
     private boolean started;
     private int activePlayer;
+    private boolean activePlayerHasRolled;
+    private int taxes = 0;
 
     private GameManager(VariablesScheme variablesScheme) {
         this.variables = variablesScheme;
         for (int i = 0; i < variablesScheme.streets().length; i++) {
             StreetScheme scheme = variablesScheme.streets()[i];
-            streets[i] = new Street(scheme.name(), scheme.cost(), scheme.rent(), scheme.group());
+            streets[i] = new Street(scheme.name(), scheme.cost(), scheme.rent(),
+                    scheme.group(), scheme.mortgaged_sell(),
+                    scheme.mortgaged_rebuy());
         }
     }
 
@@ -66,6 +70,14 @@ public class GameManager {
         return players.get(activePlayer);
     }
 
+    public boolean isActivePlayerHasRolled() {
+        return activePlayerHasRolled;
+    }
+
+    public void setActivePlayerHasRolled(boolean activePlayerHasRolled) {
+        this.activePlayerHasRolled = activePlayerHasRolled;
+    }
+
     public Dice dice() {
         return dice;
     }
@@ -82,26 +94,45 @@ public class GameManager {
         int pos = player.getPosition();
         Street street = streets[pos];
         if (pos == 0) {
+            player.addMoney(200);
             return new FieldData.SpecialField(pos, street.name());
         } else if (pos == 10) {
             return new FieldData.SpecialField(pos, street.name());
         } else if (pos == 20) {
+            // Frei Parken: Steuern ausbezahlen
+            player.addMoney(taxes);
+            taxes = 0;
             return new FieldData.SpecialField(pos, street.name());
         } else if (pos == 30) {
+            // TODO: Player ins Gefängnis
+            return new FieldData.SpecialField(pos, street.name());
+        } else if (pos == 2 || pos == 17 || pos == 33) {
+            // TODO: Community Field
+            return new FieldData.SpecialField(pos, street.name());
+        } else if (pos == 7 || pos == 22 || pos == 36) {
+            // TODO: Event Field
+            return new FieldData.SpecialField(pos, street.name());
+        } else if (pos == 4 || pos == 38) {
+            // Steuern bezahlen
+            taxes += 200;
+            player.subtractMoney(200);
             return new FieldData.SpecialField(pos, street.name());
         } else if (street.owner() == player) {
             if (street.level() == 6) {
-                return new FieldData.OwnedByPlayer(pos,
-                        street.name(), player.getId(), street.rent()[1], -1, street.cost()[5] / 2, true);
+                return new FieldData.OwnedByPlayer(pos, street.name(),
+                        player.getId(), street.rent()[1], -1,
+                        street.cost()[5] / 2, true);
             }
             // Spieler bestitz Feld schon
-            return new FieldData.OwnedByPlayer(pos,
-                    street.name(), player.getId(), street.rent()[street.level() - 1],
-                    street.cost()[street.level()], street.cost()[street.level() - 1] / 2, false);
+            return new FieldData.OwnedByPlayer(pos, street.name(),
+                    player.getId(), street.rent()[street.level() - 1],
+                    street.cost()[street.level()],
+                    street.cost()[street.level() - 1] / 2, false);
         } else {
             if (street.owner() != null) {
                 payRent(player);
-                return new FieldData.OwnedByOtherPlayer(pos, street.name(), street.owner().getId(),
+                return new FieldData.OwnedByOtherPlayer(pos, street.name(),
+                        street.owner().getId(),
                         street.rent()[street.level() - 1]);
             }
             return new FieldData.Free(pos, street.name(), street.cost()[0]);
@@ -124,7 +155,11 @@ public class GameManager {
 
     public Status buyStreet(Player player) {
         Street street = streets[player.getPosition()];
-        // TODO: Check with street group if the street is buyable and not a traion station or utility
+        if (street.group() == StreetGroup.COMMUNITY_FIELD || street.group() == StreetGroup.EVENT_FIELD || street.group() == StreetGroup.TAX
+                || street.group() == StreetGroup.FREE_PARKING || street.group() == StreetGroup.PRISON || street.group() == StreetGroup.GO_TO_PRISON
+                || street.group() == StreetGroup.START ) {
+            return Status.STREET_NOT_BUYABLE;
+        }
         if (player.getMoney() < street.cost()[0]) {
             return Status.NOT_ENOUGH_MONEY;
         }
@@ -201,12 +236,6 @@ public class GameManager {
         return Status.SUCCESS;
     }
 
-    public String specialField(Player player) {
-        Random random = new Random();
-
-        return variables.specialActions()[random.nextInt(Integer.parseInt("21"))];
-    }
-
     public boolean hasStarted() {
         return started;
     }
@@ -220,7 +249,8 @@ public class GameManager {
 
     private static String readVariables() throws IOException {
         // Manage stream
-        InputStream stream = GameManager.class.getResourceAsStream("/variables.json");
+        InputStream stream = GameManager.class.getResourceAsStream(
+                "/variables.json");
         return new String(stream.readAllBytes());
     }
 

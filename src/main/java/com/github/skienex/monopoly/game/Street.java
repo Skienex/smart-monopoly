@@ -7,12 +7,16 @@ public class Street {
     private final StreetGroup group;
     private Player owner;
     private int level;
+    private final int mortgagedSell;
+    private final int mortgagedRebuy;
 
-    public Street(String name, int[] cost, int[] rent, StreetGroup group) {
+    public Street(String name, int[] cost, int[] rent, StreetGroup group, int mortgagedSell, int mortgagedRebuy) {
         this.name = name;
         this.cost = cost;
         this.rent = rent;
         this.group = group;
+        this.mortgagedSell = mortgagedSell;
+        this.mortgagedRebuy = mortgagedRebuy;
     }
 
     public String name() {
@@ -49,5 +53,13 @@ public class Street {
 
     public void levelDown() {
         level--;
+    }
+
+    public int mortgageSell() {
+        return mortgagedSell;
+    }
+
+    public int mortageRebuy() {
+        return mortgagedRebuy;
     }
 }

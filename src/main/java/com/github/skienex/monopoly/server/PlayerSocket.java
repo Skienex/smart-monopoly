@@ -111,6 +111,11 @@ public class PlayerSocket {
                         session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
                     }
+                    if (manager.isActivePlayerHasRolled()) {
+                        session.sendAsync(ServerPacket.error(Status.ALREADY_ROLLED));
+                        return;
+                    }
+                    manager.setActivePlayerHasRolled(true);
                     Dice.Roll roll = manager.dice().roll();
                     final int old_position = manager.getPlayer(activePlayer.getId()).getPosition();
                     session.sendAsync(new ServerPacket.Roll(id, roll.firstNumber(), roll.secondNumber()));
@@ -232,6 +237,7 @@ public class PlayerSocket {
                     }
                     UUID id = sessions.get(session);
                     Player activePlayer = manager.activePlayer();
+                    manager.setActivePlayerHasRolled(false);
                     if (!activePlayer.getId().equals(id)) {
                         session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
@@ -239,7 +245,7 @@ public class PlayerSocket {
                     manager.incrementActivePlayer();
 
                     Player nextPlayer = manager.activePlayer();
-                    session.sendAsync(new ServerPacket.ActivePlayer(nextPlayer.getId()));
+                    broadcaster.broadcastAsync(new ServerPacket.ActivePlayer(nextPlayer.getId()));
                 }
             }
 //            case ClientPacket.SpecialField specialField -> {

@@ -76,12 +76,17 @@
             state.playerNames = packet.players
         },
         'START_GAME': (packet) => {
-            log.value += `Started game: ${JSON.stringify(packet.players)}\n`
+            log.value += `Started game: ${JSON.stringify(packet.players)}, ${JSON.stringify(state.playerNames[packet.id])}\n`
             roll.disabled = false
             state.playerNames = packet.players
         },
         'ACTIVE_PLAYER': (packet) => {
-            log.value += `Active player: ${state.playerNames[packet.id]}\n`
+            log.value += `Active player: ${packet.id}\n`
+            if (packet.id == state.yourId) {
+                roll.disabled = false
+            } else {
+                roll.disabled = true
+            }
             state.active = (roll.disabled = packet.id === state.yourId)
         },
         'ROLL': (packet) => {
@@ -103,6 +108,7 @@
         },
         'END_TURN': (packet) => {
             log.value += `Turn ended: ${state.playerNames[packet.id]}\n`
+            roll.disabled = false;
             end_turn.disabled = true;
         }
     }
