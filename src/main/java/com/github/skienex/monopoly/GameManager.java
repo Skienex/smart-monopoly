@@ -124,6 +124,7 @@ public class GameManager {
 
     public Status buyStreet(Player player) {
         Street street = streets[player.getPosition()];
+        // TODO: Check with street group if the street is buyable and not a traion station or utility
         if (player.getMoney() < street.cost()[0]) {
             return Status.NOT_ENOUGH_MONEY;
         }
@@ -221,5 +222,12 @@ public class GameManager {
         // Manage stream
         InputStream stream = GameManager.class.getResourceAsStream("/variables.json");
         return new String(stream.readAllBytes());
+    }
+
+    public void incrementActivePlayer() {
+        activePlayer++;
+        if (activePlayer >= players.size()) {
+            activePlayer = 0;
+        }
     }
 }

@@ -22,6 +22,7 @@ public enum Status {
     NO_HOUSE_ON_STREET("You dont have a house to dismantle on this street"),
     PLAYER_DISCONNECTED("A player disconnected"),
     NO_NAME_DEFINED("You have to pick a name"),
+    END_TURN("Turn ended"),
     PLACEHOLDER("PLACEHOLDER");
 
     private final String message;

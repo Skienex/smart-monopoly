@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ClientPacket.SellStreet.class, name = "SELL_STREET"), // Straße komplett verkaufen
         @JsonSubTypes.Type(value = ClientPacket.BuyHouse.class, name = "BUY_HOUSE"),
         @JsonSubTypes.Type(value = ClientPacket.SellHouse.class, name = "SELL_HOUSE"),
+        @JsonSubTypes.Type(value = ClientPacket.EndTurn.class, name = "END_TURN"),
 })
 public abstract class ClientPacket {
     public static class Handshake extends ClientPacket {
@@ -49,5 +50,8 @@ public abstract class ClientPacket {
     }
 
     public static class SellHouse extends ClientPacket {
+    }
+
+    public static class EndTurn extends ClientPacket {
     }
 }

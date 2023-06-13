@@ -5,232 +5,230 @@
       "group": "NONE"
     },
     {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
+      "name": "Badstraße",
+      "cost": [60, 50, 50, 50, 50, 80],
+      "rent": [2, 10, 30, 90, 160, 250],
+      "mortgaged_sell": 30,
+      "mortgaged_rebuy": 33,
+      "group": "BROWN"
+    },
+    {
+      "name": "Community Chest",
+      "group": "COMMUNITY_FIELD"
+    },
+    {
+      "name": "Turmstraße",
+      "cost": [60, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
       "group": "BROWN"
     },
     {
-      "name": "Vishnu Straße",
-      "cost": [1000 , 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "BROWN"
-    },
-    {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "TAX"
     },
     {
-      "name": "Jonte Straße",
+      "name": "Südbahnhof",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "TRAIN_STATION"
     },
     {
-      "name": "Jonte Straße",
+      "name": "Chausseestraße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "LIGHT_BLUE"
     },
     {
-      "name": "Jonte Straße",
+      "name": "Event",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "EVENT_FIELD"
     },
     {
-      "name": "Jonte Straße",
+      "name": "Elisenstraße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "LIGHT_BLUE"
     },
     {
-      "name": "Jonte Straße",
+      "name": "Poststraße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
-    },
-    {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "LIGHT_BLUE"
     },
     {
       "name": "Prison",
-      "group": "NONE"
+      "group": "PRISON"
+    },
+    {
+      "name": "Seestraße",
+      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
+      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "group": "PURPLE"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "OWNER_STREET"
+    },
+    {
+      "name": "Hafenstraße",
+      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
+      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "group": "PURPLE"
+    },
+    {
+      "name": "Neue Straße",
+      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
+      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "group": "PURPLE"
+    },
+    {
+      "name": "Westbahnhof",
+      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
+      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "group": "TRAIN_STATION"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "ORANGE"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "COMMUNITY_FIELD"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "ORANGE"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
-    },
-    {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
-    },
-    {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
-    },
-    {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
-    },
-    {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "ORANGE"
     },
     {
       "name": "Free Parking",
-      "group": "NONE"
+      "group": "FREE_PARKING"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "RED"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "EVENT_FIELD"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "RED "
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "RED"
+    },
+    {
+      "name": "Nordbahnhof",
+      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
+      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "group": "TRAIN_STATION"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "YELLOW"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "YELLOW"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "OWNER_FIELD"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
-    },
-    {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "YELLOW"
     },
     {
       "name": "Go to Prison",
-      "group": "NONE"
+      "group": "GO_TO_PRISON"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "GREEN"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "GREEN"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "COMMUNITY_FIELD"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "GREEN"
+    },
+    {
+      "name": "Hauptbahnhof",
+      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
+      "rent": [500, 700, 1000, 1250, 1500, 2250],
+      "group": "TRAIN_STATION"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "EVENT_FIELD"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "DARK_BLUE"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "TAX"
     },
     {
       "name": "Jonte Straße",
       "cost": [1000, 1200, 1400, 1500, 1600, 2000],
       "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
-    },
-    {
-      "name": "Jonte Straße",
-      "cost": [1000, 1200, 1400, 1500, 1600, 2000],
-      "rent": [500, 700, 1000, 1250, 1500, 2250],
-      "group": "NONE"
+      "group": "DARK_BLUE"
     }
   ],
   "specialActions": [

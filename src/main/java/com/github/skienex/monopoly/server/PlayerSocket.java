@@ -224,6 +224,24 @@ public class PlayerSocket {
                     session.sendAsync(new ServerPacket.FieldData(data));
                 }
             }
+            case ClientPacket.EndTurn endTurn -> {
+                synchronized (lock) {
+                    if (manager == null) {
+                        session.sendAsync(ServerPacket.error(Status.END_TURN));
+                        return;
+                    }
+                    UUID id = sessions.get(session);
+                    Player activePlayer = manager.activePlayer();
+                    if (!activePlayer.getId().equals(id)) {
+                        session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
+                        return;
+                    }
+                    manager.incrementActivePlayer();
+
+                    Player nextPlayer = manager.activePlayer();
+                    session.sendAsync(new ServerPacket.ActivePlayer(nextPlayer.getId()));
+                }
+            }
 //            case ClientPacket.SpecialField specialField -> {
 //                synchronized (lock) {
 //                    if (manager == null) {

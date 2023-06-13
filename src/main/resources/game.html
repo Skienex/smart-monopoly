@@ -20,6 +20,7 @@
 <button id="sell_street" onclick="clickSellStreet()" disabled>Sell Street</button>
 <button id="buy_house" onclick="clickBuyHouse()" disabled>Buy House</button>
 <button id="sell_house" onclick="clickSellHouse()" disabled>Sell House</button>
+<button id="end_turn" onclick="endTurn()" disabled>End turn</button>
 
 <script>
     function buildPacket(type, data) {
@@ -46,6 +47,7 @@
     const sell_street = document.getElementById("sell_street")
     const buy_house = document.getElementById("buy_house")
     const sell_house = document.getElementById("sell_house")
+    const end_turn = document.getElementById("end_turn")
 
     const callbacks = {
         'ERROR': (packet) => {
@@ -76,6 +78,7 @@
         'START_GAME': (packet) => {
             log.value += `Started game: ${JSON.stringify(packet.players)}\n`
             roll.disabled = false
+            state.playerNames = packet.players
         },
         'ACTIVE_PLAYER': (packet) => {
             log.value += `Active player: ${state.playerNames[packet.id]}\n`
@@ -84,6 +87,7 @@
         'ROLL': (packet) => {
             const pasch = packet.first === packet.second
             log.value += `Roll: ${packet.first}, ${packet.second}, pasch: ${pasch}, UUID: ${packet.id}\n`
+            end_turn.disabled = false;
         },
         'MOVE_PLAYER': (packet) => {
             log.value += `Moved player: ${state.playerNames[packet.id]}, ${packet.position}, ${packet.oldPosition}\n`
@@ -96,6 +100,10 @@
             state.money = packet.money
             money.innerText = state.money
             log.value += `Money: ${state.money}\n`
+        },
+        'END_TURN': (packet) => {
+            log.value += `Turn ended: ${state.playerNames[packet.id]}\n`
+            end_turn.disabled = true;
         }
     }
 
@@ -166,6 +174,10 @@
 
     function clickSellHouse() {
         con.socket.send(buildPacket('SELL_HOUSE', {}))
+    }
+
+    function endTurn() {
+        con.socket.send(buildPacket('END_TURN', {}))
     }
 </script>
 </body>
