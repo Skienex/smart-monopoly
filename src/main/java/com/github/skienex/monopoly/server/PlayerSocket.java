@@ -101,6 +101,10 @@ public class PlayerSocket {
             }
             case ClientPacket.RollDice rollDice -> {
                 synchronized (lock) {
+                    if (manager.isPayMoneyQueue()) {
+                        session.sendAsync(ServerPacket.error(Status.PAY_MONEY_QUEUE));
+                        return;
+                    }
                     if (manager == null) {
                         session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
                         return;
@@ -155,6 +159,10 @@ public class PlayerSocket {
                         session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
                         return;
                     }
+                    if (manager.isPayMoneyQueue()) {
+                        session.sendAsync(ServerPacket.error(Status.PAY_MONEY_QUEUE));
+                        return;
+                    }
                     UUID id = sessions.get(session);
                     Player activePlayer = manager.activePlayer();
                     if (!activePlayer.getId().equals(id)) {
@@ -181,7 +189,13 @@ public class PlayerSocket {
                         session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
                     }
-                    Status status = manager.sellStreet(activePlayer);
+                    Status status;
+                    if (sellStreet.pos == -1) {
+                        status = manager.sellStreet(activePlayer, activePlayer.getPosition());
+                    } else {
+                        status = manager.sellStreet(activePlayer,
+                                sellStreet.pos);
+                    }
                     session.sendAsync(ServerPacket.error(status));
                     session.sendAsync(new ServerPacket.Money(activePlayer.getMoney()));
 
@@ -195,13 +209,23 @@ public class PlayerSocket {
                         session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
                         return;
                     }
+                    if (manager.isPayMoneyQueue()) {
+                        session.sendAsync(ServerPacket.error(Status.PAY_MONEY_QUEUE));
+                        return;
+                    }
                     UUID id = sessions.get(session);
                     Player activePlayer = manager.activePlayer();
                     if (!activePlayer.getId().equals(id)) {
                         session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
                     }
-                    Status status = manager.buyHouse(activePlayer);
+                    Status status;
+                    if (buyHouse.pos == -1) {
+                        status = manager.sellStreet(activePlayer, activePlayer.getPosition());
+                    } else {
+                        status = manager.sellStreet(activePlayer,
+                                buyHouse.pos);
+                    }
                     session.sendAsync(ServerPacket.error(status));
                     session.sendAsync(new ServerPacket.Money(activePlayer.getMoney()));
 
@@ -221,7 +245,13 @@ public class PlayerSocket {
                         session.sendAsync(ServerPacket.error(Status.NOT_YOUR_TURN));
                         return;
                     }
-                    Status status = manager.sellHouse(activePlayer);
+                    Status status;
+                    if (sellHouse.pos == -1) {
+                        status = manager.sellStreet(activePlayer, activePlayer.getPosition());
+                    } else {
+                        status = manager.sellStreet(activePlayer,
+                                sellHouse.pos);
+                    }
                     session.sendAsync(ServerPacket.error(status));
                     session.sendAsync(new ServerPacket.Money(activePlayer.getMoney()));
 
@@ -229,10 +259,25 @@ public class PlayerSocket {
                     session.sendAsync(new ServerPacket.FieldData(data));
                 }
             }
+            case ClientPacket.Confirm confirm -> {
+                synchronized (lock) {
+                    if (manager == null) {
+                        session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
+                        return;
+                    }
+                    UUID id = sessions.get(session);
+                    Player activePlayer = manager.activePlayer();
+                    if (manager.getPayQueueMoney() > activePlayer.getMoney()) {
+                        session.sendAsync(ServerPacket.error(Status.NOT_ENOUGH_MONEY));
+                        return;
+                    }
+                    manager.payMoneyQueue(0 ,false);
+                }
+            }
             case ClientPacket.EndTurn endTurn -> {
                 synchronized (lock) {
                     if (manager == null) {
-                        session.sendAsync(ServerPacket.error(Status.END_TURN));
+                        session.sendAsync(ServerPacket.error(Status.NO_GAME_EXISTS));
                         return;
                     }
                     UUID id = sessions.get(session);

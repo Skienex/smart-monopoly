@@ -23,6 +23,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = ServerPacket.MovePlayer.class, name = "MOVE_PLAYER"),
         @JsonSubTypes.Type(value = ServerPacket.FieldData.class, name = "FIELD_DATA"),
         @JsonSubTypes.Type(value = ServerPacket.FieldAction.class, name = "FIELD_ACTION"),
+        @JsonSubTypes.Type(value = ServerPacket.SpecialAction.class, name = "SPECIAL_ACTION"),
         @JsonSubTypes.Type(value = ServerPacket.Money.class, name = "MONEY"),
         @JsonSubTypes.Type(value = ServerPacket.EndTurn.class, name = "END_TURN"),
 })
@@ -153,6 +154,14 @@ public abstract class ServerPacket {
 
         public Money(int money) {
             this.money = money;
+        }
+    }
+
+    public static class SpecialAction extends ServerPacket {
+        public final String action;
+
+        public SpecialAction(String action) {
+            this.action = action;
         }
     }
 

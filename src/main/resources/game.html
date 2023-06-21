@@ -5,36 +5,25 @@
     <title>Title</title>
 </head>
 <body>
-<label><input id="username" type="text" placeholder="Username"></label>
-<br>
-<h2 id="money"></h2>
-<br>
-<label><textarea id="log" style="width: 100%; height: 80vh; box-sizing: border-box; font-size: 150%;"
-                 disabled></textarea></label>
-<br>
-<button id="connect" onclick="clickConnect()">Connect</button>
-<button id="login" onclick="clickLogin()" disabled>Login</button>
-<button id="start" onclick="clickStartGame()" disabled>Start Game</button>
-<button id="roll" onclick="clickRollDice()" disabled>Roll Dice</button>
-<button id="buy_street" onclick="clickBuyStreet()" disabled>Buy Street</button>
-<button id="sell_street" onclick="clickSellStreet()" disabled>Sell Street</button>
-<button id="buy_house" onclick="clickBuyHouse()" disabled>Buy House</button>
-<button id="sell_house" onclick="clickSellHouse()" disabled>Sell House</button>
-<button id="end_turn" onclick="endTurn()" disabled>End turn</button>
-
+<div id="standard_page">
+    <label><input id="username" type="text" placeholder="Username"></label>
+    <br>
+    <h2 id="money"></h2>
+    <br>
+    <label><textarea id="log" style="width: 100%; height: 80vh; box-sizing: border-box; font-size: 150%;"
+                     disabled></textarea></label>
+    <br>
+    <button id="connect" onclick="clickConnect()">Connect</button>
+    <button id="login" onclick="clickLogin()" disabled>Login</button>
+    <button id="start" onclick="clickStartGame()" disabled>Start Game</button>
+    <button id="roll" onclick="clickRollDice()">Roll Dice</button>
+    <button id="buy_street" onclick="clickBuyStreet()" disabled>Buy Street</button>
+    <button id="sell_street" onclick="clickSellStreet()" disabled>Sell Street</button>
+    <button id="buy_house" onclick="clickBuyHouse()" disabled>Buy House</button>
+    <button id="sell_house" onclick="clickSellHouse()" disabled>Sell House</button>
+    <button id="end_turn" onclick="endTurn()" disabled>End turn</button>
+</div>
 <script>
-    function buildPacket(type, data) {
-        return JSON.stringify({type: type, ...data})
-    }
-
-    const keepAlive = buildPacket("KEEP_ALIVE", {})
-
-    const con = {
-        socket: undefined,
-        connected: false,
-    }
-    let state = undefined
-
     const log = document.getElementById("log")
     log.value = ''
     const username = document.getElementById("username")
@@ -49,6 +38,22 @@
     const sell_house = document.getElementById("sell_house")
     const end_turn = document.getElementById("end_turn")
 
+    /*
+       WEBSOCKET
+    */
+    let state = undefined // Variable to save recived data
+    function buildPacket(type, data) {
+        return JSON.stringify({type: type, ...data})
+    }
+
+    const keepAlive = buildPacket("KEEP_ALIVE", {})
+
+    const con = {
+        socket: undefined,
+        connected: false,
+    }
+
+    // recive packages
     const callbacks = {
         'ERROR': (packet) => {
             log.value += `Error: ${packet.message}\n`
@@ -65,6 +70,7 @@
                 money: 2500,
                 playerNames: {},
                 fieldData: undefined,
+                streets: undefined
             }
             money.innerText = state.money
             if (state.admin) {
@@ -76,9 +82,9 @@
             state.playerNames = packet.players
         },
         'START_GAME': (packet) => {
-            log.value += `Started game: ${JSON.stringify(packet.players)}, ${JSON.stringify(state.playerNames[packet.id])}\n`
-            roll.disabled = false
+            log.value += `Started game: ${JSON.stringify(packet.players)}, Your id: ${state.yourId}\n`
             state.playerNames = packet.players
+            state.streets = packet.variables
         },
         'ACTIVE_PLAYER': (packet) => {
             log.value += `Active player: ${packet.id}\n`
@@ -106,6 +112,9 @@
             money.innerText = state.money
             log.value += `Money: ${state.money}\n`
         },
+        'SPECIAL_ACTION': (packet) => {
+            log.value += `Special action: ${packet.action}\n`
+        },
         'END_TURN': (packet) => {
             log.value += `Turn ended: ${state.playerNames[packet.id]}\n`
             roll.disabled = false;
@@ -113,6 +122,7 @@
         }
     }
 
+    // react to button clicks and send packages
     function clickConnect() {
         state = undefined
         connect.disabled = true

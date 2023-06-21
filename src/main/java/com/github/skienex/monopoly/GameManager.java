@@ -18,6 +18,8 @@ public class GameManager {
     private boolean started;
     private int activePlayer;
     private boolean activePlayerHasRolled;
+    private boolean payMoneyQueue;
+    private int payMoneyQueueAmount;
     private int taxes = 0;
 
     private GameManager(VariablesScheme variablesScheme) {
@@ -78,6 +80,19 @@ public class GameManager {
         this.activePlayerHasRolled = activePlayerHasRolled;
     }
 
+    public void payMoneyQueue(int amount, boolean payMoneyQueue) {
+        this.payMoneyQueue = payMoneyQueue;
+        this.payMoneyQueueAmount = amount;
+    }
+
+    public boolean isPayMoneyQueue() {
+        return payMoneyQueue;
+    }
+
+    public int getPayQueueMoney() {
+        return payMoneyQueueAmount;
+    }
+
     public Dice dice() {
         return dice;
     }
@@ -94,29 +109,108 @@ public class GameManager {
         int pos = player.getPosition();
         Street street = streets[pos];
         if (pos == 0) {
-            player.addMoney(200);
-            return new FieldData.SpecialField(pos, street.name());
+            return new FieldData.SpecialField(pos, street.name(), "");
         } else if (pos == 10) {
-            return new FieldData.SpecialField(pos, street.name());
+            return new FieldData.SpecialField(pos, street.name(), "");
         } else if (pos == 20) {
             // Frei Parken: Steuern ausbezahlen
             player.addMoney(taxes);
             taxes = 0;
-            return new FieldData.SpecialField(pos, street.name());
+            return new FieldData.SpecialField(pos, street.name(), "");
         } else if (pos == 30) {
             // TODO: Player ins Gefängnis
-            return new FieldData.SpecialField(pos, street.name());
+            return new FieldData.SpecialField(pos, street.name(), "");
         } else if (pos == 2 || pos == 17 || pos == 33) {
             // TODO: Community Field
-            return new FieldData.SpecialField(pos, street.name());
+            int random = new Random().nextInt(15);
+            switch (random) {
+                case 0 -> {
+                    if (player.getMoney() <= 50) {
+
+                    }
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Schulgeld. Zahlen Sie M 50.");
+                }
+                case 1 -> {
+                    player.subtractMoney(200);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Urlaubsgeld! Sie erhalten M 100.");
+                }
+                case 2 -> {
+                    player.addMoney(50);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Ihre Lebensversicherung wird fällig. Sie erhalten M 100.");
+                }
+                case 3 -> {
+                    player.subtractMoney(50);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Arzt-Kosten. Zahlen Sie M 50.");
+                }
+                case 4 -> {
+                    player.addMoney(100);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Einkommenssteuerrückerstattung. Sie erhalten M 20.");
+                }
+                case 5 -> {
+                    player.subtractMoney(100);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Krankenhausgebühren. Zahlen Sie M 100.");
+                }
+                case 6 -> {
+                    player.addMoney(20);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Gehen Sie in das Gefängnis. Begeben Sie sich direkt dorthin. Gehen Sie nicht über Los. Ziehen Sie nicht M 200 ein.");
+                }
+                case 7 -> {
+                    player.subtractMoney(20);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Sie erhalten auf Vorzugs-Aktien 7% Dividende: M 25.");
+                }
+                case 8 -> {
+                    player.addMoney(10);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Sie haben Geburtstag. Jeder Spieler schenkt Ihnen M 10.");
+                }
+                case 9 -> {
+                    player.subtractMoney(10);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Sie erben M 100.");
+                }
+                case 10 -> {
+                    player.addMoney(100);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Aus Lagerverkäufen erhalten Sie M 50.");
+                }
+                case 11 -> {
+                    player.subtractMoney(100);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Zweiter Preis im Schönheitswettbewerb. Sie erhalten M 10.");
+                }
+                case 12 -> {
+                    player.addMoney(50);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Sie werden zu Straßenausbesserungsarbeiten herangezogen. Zahlen Sie M 40 je Haus und M 115 je Hotel an die Bank.");
+                }
+                case 13 -> {
+                    player.subtractMoney(50);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Rücken Sie vor bis auf Los. (Ziehe M 200 ein).");
+                }
+                case 14 -> {
+                    player.addMoney(40);
+                    return new FieldData.SpecialField(pos, street.name(),
+                            "Bank-Irrtum zu Ihren Gunsten. Ziehen Sie M 200 ein.");
+                }
+            }
+            return new FieldData.SpecialField(pos, street.name(), "");
         } else if (pos == 7 || pos == 22 || pos == 36) {
             // TODO: Event Field
-            return new FieldData.SpecialField(pos, street.name());
+            return new FieldData.SpecialField(pos, street.name(), "");
         } else if (pos == 4 || pos == 38) {
             // Steuern bezahlen
             taxes += 200;
             player.subtractMoney(200);
-            return new FieldData.SpecialField(pos, street.name());
+            return new FieldData.SpecialField(pos, street.name(), "Steuern bezahlen. Sie erhalten M 200.");
         } else if (street.owner() == player) {
             if (street.level() == 6) {
                 return new FieldData.OwnedByPlayer(pos, street.name(),
@@ -145,9 +239,11 @@ public class GameManager {
             return Status.YOUR_STREET;
         }
         if (player.getMoney() < street.rent()[street.level() - 1]) {
+            payMoneyQueue(street.rent()[street.level() - 1] ,true);
             return Status.NOT_ENOUGH_MONEY;
             // TODO: Möglichkeit Straßen/Häuser zu verkaufen anzeigen
         }
+        payMoneyQueue(0 ,false);
         player.subtractMoney(street.rent()[street.level() - 1]);
 
         return Status.SUCCESS;
@@ -172,9 +268,10 @@ public class GameManager {
         return Status.SUCCESS;
     }
 
-    public Status sellStreet(Player player) {
-        Street street = streets[player.getPosition()];
+    public Status sellStreet(Player player, int pos) {
+        Street street = streets[pos];
         if (street.owner() == player && street.level() > 0) {
+            payMoneyQueue((street.cost()[0] / 2) ,false);
             player.addMoney((street.cost()[0] / 2));
             street.owner(null);
             street.levelDown();
@@ -183,8 +280,8 @@ public class GameManager {
         return Status.NOT_YOUR_STREET;
     }
 
-    public Status buyHouse(Player player) {
-        Street street = streets[player.getPosition()];
+    public Status buyHouse(Player player, int pos) {
+        Street street = streets[pos];
         if (street.owner() != player) {
             return Status.NOT_YOUR_STREET;
         }
@@ -211,8 +308,8 @@ public class GameManager {
         return Status.SUCCESS;
     }
 
-    public Status sellHouse(Player player) {
-        Street street = streets[player.getPosition()];
+    public Status sellHouse(Player player, int pos) {
+        Street street = streets[pos];
         if (street.owner() != player) {
             return Status.NOT_YOUR_STREET;
         }
@@ -259,5 +356,9 @@ public class GameManager {
         if (activePlayer >= players.size()) {
             activePlayer = 0;
         }
+    }
+
+    public Street[] getAllStreets() {
+        return streets;
     }
 }

@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ClientPacket.SellStreet.class, name = "SELL_STREET"), // Straße komplett verkaufen
         @JsonSubTypes.Type(value = ClientPacket.BuyHouse.class, name = "BUY_HOUSE"),
         @JsonSubTypes.Type(value = ClientPacket.SellHouse.class, name = "SELL_HOUSE"),
+        @JsonSubTypes.Type(value = ClientPacket.Confirm.class, name = "CONFIRM"),
         @JsonSubTypes.Type(value = ClientPacket.EndTurn.class, name = "END_TURN"),
 })
 public abstract class ClientPacket {
@@ -44,12 +45,30 @@ public abstract class ClientPacket {
     }
 
     public static class SellStreet extends ClientPacket {
+        public final int pos;
+
+        public SellStreet(int pos) {
+            this.pos = pos;
+        }
     }
 
     public static class BuyHouse extends ClientPacket {
+        public final int pos;
+
+        public BuyHouse(int pos) {
+            this.pos = pos;
+        }
     }
 
     public static class SellHouse extends ClientPacket {
+        public final int pos;
+
+        public SellHouse(@JsonProperty(defaultValue = "-1") int pos) {
+            this.pos = pos;
+        }
+    }
+
+    public static class Confirm extends ClientPacket {
     }
 
     public static class EndTurn extends ClientPacket {

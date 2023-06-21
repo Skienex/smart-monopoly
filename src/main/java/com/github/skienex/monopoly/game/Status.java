@@ -24,6 +24,7 @@ public enum Status {
     NO_NAME_DEFINED("You have to pick a name"),
     END_TURN("Turn ended"),
     ALREADY_ROLLED("You already rolled the dice"),
+    PAY_MONEY_QUEUE("You have to pay your rent first money"),
     PLACEHOLDER("PLACEHOLDER");
 
     private final String message;

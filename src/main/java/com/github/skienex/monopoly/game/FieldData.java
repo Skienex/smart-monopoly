@@ -62,10 +62,12 @@ public abstract class FieldData {
     public static class SpecialField extends FieldData {
         public final int id;
         public final String name;
+        public final String description;
 
-        public SpecialField(int id, String name) {
+        public SpecialField(int id, String name, String description) {
             this.id = id;
             this.name = name;
+            this.description = description;
         }
     }
 }
